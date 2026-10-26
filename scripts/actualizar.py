@@ -20,25 +20,60 @@ ORDEN = ["coto", "dia", "carrefour", "jumbo", "disco", "vea", "changomas"]
 PREF_DESC = ["coto", "carrefour", "changomas", "jumbo", "disco", "vea", "dia"]  # de qué cadena tomar el nombre
 
 # ---------------------------------------------------------------- descarga
+NAVEGADOR = {  # el portal rechaza (403) los pedidos que no parecen de un navegador
+    "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0 Safari/537.36",
+    "Accept": "text/html,application/json,application/zip,*/*;q=0.8",
+    "Accept-Language": "es-AR,es;q=0.9",
+}
+
+def pedir(url, timeout=60):
+    return urllib.request.urlopen(urllib.request.Request(url, headers=NAVEGADOR), timeout=timeout)
+
+def candidatos():
+    """Lista de (nombre, url, fecha) de los zips del dataset. Prueba la API y, si falla, la página web."""
+    errores = []
+    try:
+        with pedir(f"{PORTAL}/api/3/action/package_show?id={DATASET}") as r:
+            rec = json.load(r)["result"]["resources"]
+        zs = [(x.get("name", ""), x["url"], x.get("last_modified") or x.get("created") or "")
+              for x in rec if str(x.get("url", "")).lower().split("?")[0].endswith(".zip")]
+        if zs:
+            return zs
+        errores.append("la API no listó archivos .zip")
+    except Exception as e:
+        errores.append(f"API: {e}")
+    try:
+        with pedir(f"{PORTAL}/dataset/{DATASET}") as r:
+            html = r.read().decode("utf-8", "ignore")
+        urls = sorted(set(re.findall(r'href="([^"]+?\.zip)"', html)))
+        urls = [u if u.startswith("http") else PORTAL + u for u in urls]
+        if urls:
+            return [(u.rsplit("/", 1)[-1], u, "") for u in urls]
+        errores.append("la página del dataset no tiene links a .zip")
+    except Exception as e:
+        errores.append(f"página: {e}")
+    sys.exit("No pude obtener la lista de archivos de SEPA (" + "; ".join(errores) + ").\n"
+             "Si el error es 403, el portal está bloqueando los servidores de GitHub. "
+             "Alternativa: pegar la dirección directa del zip en el secreto SEPA_URL del repositorio.")
+
 def descargar(destino):
-    """Busca en el portal (API CKAN) el zip más reciente del dataset y lo descarga."""
-    with urllib.request.urlopen(f"{PORTAL}/api/3/action/package_show?id={DATASET}", timeout=60) as r:
-        recursos = json.load(r)["result"]["resources"]
-    zips = [x for x in recursos if str(x.get("url", "")).lower().endswith(".zip")]
-    if not zips:
-        sys.exit("No encontré archivos .zip en el dataset de SEPA.")
-    dias = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"]
-    hoy = dt.date.today().weekday()
-    # preferimos el de ayer o el de hoy según el nombre; si no, el modificado más recientemente
-    def puntaje(x):
-        nombre = (x.get("name", "") + x.get("url", "")).lower()
-        for atras in range(7):
-            if dias[(hoy - atras) % 7] in nombre:
-                return (0, atras)
-        return (1, -(dt.datetime.fromisoformat((x.get("last_modified") or x.get("created") or "2000-01-01")[:19]).timestamp()))
-    elegido = sorted(zips, key=puntaje)[0]
-    print("Descargando", elegido["url"], file=sys.stderr)
-    urllib.request.urlretrieve(elegido["url"], destino)
+    """Descarga el zip de SEPA más reciente. Si existe la variable SEPA_URL, usa esa dirección."""
+    url = os.environ.get("SEPA_URL", "").strip()
+    if not url:
+        zs = candidatos()
+        dias = ["lunes", "martes", "miercoles", "jueves", "viernes", "sabado", "domingo"]
+        hoy = dt.date.today().weekday()
+        def puntaje(x):  # preferimos el del día más reciente según el nombre; si no, por fecha de modificación
+            nombre = (x[0] + x[1]).lower()
+            for atras in range(7):
+                if dias[(hoy - atras) % 7] in nombre:
+                    return (0, atras, "")
+            return (1, 0, "".join(chr(255 - ord(c)) for c in x[2]))
+        url = sorted(zs, key=puntaje)[0][1]
+    print("Descargando", url, file=sys.stderr)
+    with pedir(url, timeout=600) as r, open(destino, "wb") as f:
+        shutil.copyfileobj(r, f, 1024 * 1024)
+    print(f"Descargado: {os.path.getsize(destino) / 1e6:.0f} MB", file=sys.stderr)
     return destino
 
 def extraer(zip_path, carpeta):
