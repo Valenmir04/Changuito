@@ -1,0 +1,565 @@
+[
+ {
+  "id": "yerba",
+  "nombre": "Yerba mate",
+  "pres": "1 kg",
+  "variantes": [
+   [
+    "Playadito suave",
+    "7793704000928"
+   ],
+   [
+    "Taragüí con palo",
+    "7790387013610"
+   ],
+   [
+    "Amanda con palo",
+    "7792710000175"
+   ],
+   [
+    "Unión suave",
+    "7790387014617"
+   ],
+   [
+    "Chamigo",
+    "7790070509017"
+   ],
+   [
+    "La Tranquera suave",
+    "7790480089949"
+   ]
+  ]
+ },
+ {
+  "id": "fideos",
+  "nombre": "Fideos largos",
+  "pres": "500 g",
+  "variantes": [
+   [
+    "Lucchetti spaghetti",
+    "7790070336385"
+   ],
+   [
+    "Lucchetti tallarín",
+    "7790070336118"
+   ],
+   [
+    "Matarazzo spaghetti",
+    "7790070336309"
+   ],
+   [
+    "Matarazzo tallarín",
+    "7790070336316"
+   ],
+   [
+    "Favorita tallarín",
+    "7790070320292"
+   ],
+   [
+    "Don Vicente tallarín",
+    "7790070336576"
+   ]
+  ]
+ },
+ {
+  "id": "arroz",
+  "nombre": "Arroz largo fino",
+  "pres": "1 kg",
+  "variantes": [
+   [
+    "Molinos Ala",
+    "7791120031557"
+   ],
+   [
+    "Lucchetti",
+    "7790070431486"
+   ],
+   [
+    "Gallo",
+    "7790070431448"
+   ]
+  ]
+ },
+ {
+  "id": "aceite",
+  "nombre": "Aceite de girasol",
+  "pres": "1,5 L",
+  "variantes": [
+   [
+    "Cañuelas",
+    "7792180001665"
+   ],
+   [
+    "Cocinero",
+    "7790060023684"
+   ],
+   [
+    "Natura",
+    "7790272001029"
+   ],
+   [
+    "Legítimo",
+    "7798316700815"
+   ],
+   [
+    "Pureza",
+    "7792180137944"
+   ]
+  ]
+ },
+ {
+  "id": "azucar",
+  "nombre": "Azúcar",
+  "pres": "1 kg",
+  "variantes": [
+   [
+    "Ledesma",
+    "7792540250450"
+   ]
+  ]
+ },
+ {
+  "id": "harina",
+  "nombre": "Harina 000",
+  "pres": "1 kg",
+  "variantes": [
+   [
+    "Cañuelas",
+    "7792180139320"
+   ],
+   [
+    "Favorita",
+    "7790070562258"
+   ],
+   [
+    "Morixe",
+    "7790199000013"
+   ],
+   [
+    "Caserita",
+    "7792590000159"
+   ]
+  ]
+ },
+ {
+  "id": "pure",
+  "nombre": "Puré de tomate",
+  "pres": "520 g",
+  "variantes": [
+   [
+    "Arcor",
+    "7790580146115"
+   ],
+   [
+    "La Campagnola",
+    "7790580138868"
+   ],
+   [
+    "Salsati",
+    "7793360000157"
+   ]
+  ]
+ },
+ {
+  "id": "ddl",
+  "nombre": "Dulce de leche",
+  "pres": "400 g",
+  "variantes": [
+   [
+    "La Serenísima clásico",
+    "7790742625304"
+   ],
+   [
+    "La Serenísima colonial",
+    "7790742625205"
+   ],
+   [
+    "Milkaut familiar",
+    "7794820902936"
+   ],
+   [
+    "San Ignacio",
+    "7790244001453"
+   ]
+  ]
+ },
+ {
+  "id": "galle",
+  "nombre": "Galletitas crackers",
+  "pres": "3 × 100 g",
+  "variantes": [
+   [
+    "Criollitas",
+    "7790040377806"
+   ],
+   [
+    "Paseo cinco semillas",
+    "7792180007315"
+   ]
+  ]
+ },
+ {
+  "id": "mayo",
+  "nombre": "Mayonesa",
+  "pres": "475 g",
+  "variantes": [
+   [
+    "Hellmann's clásica",
+    "7794000006072"
+   ],
+   [
+    "Natura",
+    "7791866001364"
+   ]
+  ]
+ },
+ {
+  "id": "cafe",
+  "nombre": "Café molido",
+  "pres": "250 g",
+  "variantes": [
+   [
+    "La Virginia",
+    "7790150006320"
+   ],
+   [
+    "La Planta de Café",
+    "7790550000157"
+   ]
+  ]
+ },
+ {
+  "id": "leche",
+  "nombre": "Leche entera",
+  "pres": "1 L",
+  "variantes": [
+   [
+    "La Serenísima sachet",
+    "7790742348302"
+   ],
+   [
+    "Casanto sachet",
+    "7790742192301"
+   ],
+   [
+    "Tregar brik",
+    "7793913001822"
+   ],
+   [
+    "Las Tres Niñas brik",
+    "7798338290028"
+   ],
+   [
+    "La Serenísima brik",
+    "7790742363008"
+   ]
+  ]
+ },
+ {
+  "id": "lechedesc",
+  "nombre": "Leche descremada",
+  "pres": "1 L",
+  "variantes": [
+   [
+    "La Serenísima 1% sachet",
+    "7790742348005"
+   ],
+   [
+    "Casanto sachet",
+    "7790742192103"
+   ],
+   [
+    "Tregar brik",
+    "7793913012996"
+   ]
+  ]
+ },
+ {
+  "id": "manteca",
+  "nombre": "Manteca",
+  "pres": "200 g",
+  "variantes": [
+   [
+    "Tonadita",
+    "7798060850026"
+   ],
+   [
+    "La Paulina",
+    "7790398100088"
+   ],
+   [
+    "La Serenísima",
+    "7793940054006"
+   ],
+   [
+    "Primer Premio",
+    "7798085370080"
+   ]
+  ]
+ },
+ {
+  "id": "queso",
+  "nombre": "Queso crema",
+  "pres": "290 g",
+  "variantes": [
+   [
+    "La Paulina",
+    "7794990879656"
+   ],
+   [
+    "La Serenísima clásico",
+    "7791337061422"
+   ],
+   [
+    "Casancrem",
+    "7791337061361"
+   ]
+  ]
+ },
+ {
+  "id": "yogur",
+  "nombre": "Yogur bebible Danonino",
+  "pres": "1 kg",
+  "variantes": [
+   [
+    "Frutilla",
+    "7791337008670"
+   ],
+   [
+    "Vainilla",
+    "7791337008687"
+   ]
+  ]
+ },
+ {
+  "id": "cola",
+  "nombre": "Gaseosa cola",
+  "pres": "2,25 L",
+  "variantes": [
+   [
+    "Coca-Cola",
+    "7790895000997"
+   ],
+   [
+    "Coca-Cola Zero",
+    "7790895067570"
+   ],
+   [
+    "Cunnington",
+    "7790639003437"
+   ]
+  ]
+ },
+ {
+  "id": "agua",
+  "nombre": "Agua mineral sin gas",
+  "pres": "2 L",
+  "variantes": [
+   [
+    "Villavicencio",
+    "7799155000197"
+   ],
+   [
+    "Glaciar",
+    "7792931000039"
+   ],
+   [
+    "Eco de los Andes",
+    "7792799000097"
+   ],
+   [
+    "Sierra de los Padres",
+    "7798065730033"
+   ]
+  ]
+ },
+ {
+  "id": "birra",
+  "nombre": "Cerveza en lata",
+  "pres": "473 ml",
+  "variantes": [
+   [
+    "Schneider",
+    "7793147118860"
+   ],
+   [
+    "Amstel",
+    "7793147573546"
+   ],
+   [
+    "Imperial lager",
+    "7793147000752"
+   ]
+  ]
+ },
+ {
+  "id": "jugo",
+  "nombre": "Jugo en polvo Tang",
+  "pres": "Sobre 15 g",
+  "variantes": [
+   [
+    "Naranja",
+    "7622201705961"
+   ],
+   [
+    "Manzana",
+    "7622201705992"
+   ],
+   [
+    "Multifruta",
+    "7622201735715"
+   ]
+  ]
+ },
+ {
+  "id": "deter",
+  "nombre": "Detergente",
+  "pres": "500 ml",
+  "variantes": [
+   [
+    "Ala",
+    "7791290794320"
+   ],
+   [
+    "Cif",
+    "7791290794061"
+   ],
+   [
+    "Magistral",
+    "7790990003039"
+   ]
+  ]
+ },
+ {
+  "id": "lavan",
+  "nombre": "Lavandina",
+  "pres": "1 L",
+  "variantes": [
+   [
+    "Ayudín original",
+    "7790132098459"
+   ]
+  ]
+ },
+ {
+  "id": "jabonliq",
+  "nombre": "Jabón líquido para ropa",
+  "pres": "3 L",
+  "variantes": [
+   [
+    "Ala",
+    "7791290792036"
+   ],
+   [
+    "Skip",
+    "7791290792791"
+   ],
+   [
+    "Ecovita",
+    "7798124362342"
+   ],
+   [
+    "Zorro",
+    "7790990002186"
+   ]
+  ]
+ },
+ {
+  "id": "papel",
+  "nombre": "Papel higiénico doble hoja",
+  "pres": "4 × 30 m",
+  "variantes": [
+   [
+    "Higienol",
+    "7790250015536"
+   ],
+   [
+    "Elite",
+    "7790250026075"
+   ]
+  ]
+ },
+ {
+  "id": "rollo",
+  "nombre": "Rollo de cocina",
+  "pres": "3 × 50 paños",
+  "variantes": [
+   [
+    "Sussex",
+    "7790250056881"
+   ]
+  ]
+ },
+ {
+  "id": "sham",
+  "nombre": "Shampoo",
+  "pres": "400 ml",
+  "variantes": [
+   [
+    "Dove",
+    "7791293047102"
+   ],
+   [
+    "Tío Nacho",
+    "7798140257714"
+   ],
+   [
+    "Johnson's Baby",
+    "7790010002981"
+   ]
+  ]
+ },
+ {
+  "id": "pasta",
+  "nombre": "Pasta dental",
+  "pres": "90 g",
+  "variantes": [
+   [
+    "Odol",
+    "7509546687292"
+   ],
+   [
+    "Colgate triple beneficio",
+    "7509546686523"
+   ]
+  ]
+ },
+ {
+  "id": "deso",
+  "nombre": "Desodorante aerosol",
+  "pres": "150 ml",
+  "variantes": [
+   [
+    "Rexona",
+    "7791293049496"
+   ],
+   [
+    "Nivea",
+    "4005900122186"
+   ],
+   [
+    "Dove",
+    "7791293048475"
+   ],
+   [
+    "Axe",
+    "7791293043791"
+   ]
+  ]
+ },
+ {
+  "id": "jabon",
+  "nombre": "Jabón de tocador",
+  "pres": "3 × 120 g",
+  "variantes": [
+   [
+    "Lux",
+    "7791293050805"
+   ],
+   [
+    "Rexona",
+    "7791293050911"
+   ]
+  ]
+ }
+]
