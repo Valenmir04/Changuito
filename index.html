@@ -140,6 +140,27 @@ header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-
 .pnear{font-size:13px;margin:10px 0 0;background:var(--navy-soft);color:var(--navy);border-radius:var(--r-sm);padding:8px 10px}
 .pfine{font-size:12px;color:var(--muted);margin:10px 0 0;line-height:1.4}
 
+.payhead{display:flex;justify-content:space-between;align-items:baseline;gap:6px 12px;flex-wrap:wrap;margin-bottom:8px}
+.paybtns{display:flex;gap:12px}
+.paygroup+.paygroup{margin-top:10px}
+.paygt{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.lblrow{display:flex;align-items:center;gap:6px}
+.lblrow .lbl{margin-bottom:0}
+.field .lblrow{margin-bottom:8px}
+.tip{position:relative;display:inline-flex}
+.tipbtn{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--navy);background:var(--surface);color:var(--navy);font-size:12px;font-weight:700;line-height:1;cursor:help;padding:0;display:grid;place-items:center}
+.tipbtn:hover,.tipbtn:focus-visible{background:var(--navy);color:#fff}
+.tiptxt{position:absolute;z-index:30;top:calc(100% + 8px);right:-10px;width:min(280px,78vw);background:var(--ink);color:#fff;font-size:13px;font-weight:500;line-height:1.45;border-radius:10px;padding:10px 12px;box-shadow:0 8px 24px rgba(30,36,48,.18);opacity:0;visibility:hidden;pointer-events:none;text-transform:none;letter-spacing:0}
+.tip:hover .tiptxt,.tip:focus-within .tiptxt{opacity:1;visibility:visible}
+#splitPanel .tiptxt{left:-10px;right:auto}
+.bgroup.alt td{background:#FCFAF6}
+.bgroup tr:first-child td,.bgroup tr:first-child th{border-top:2px solid var(--line-strong)}
+#bankTbl td:first-child,#bankTbl thead th:first-child{position:static;min-width:0}
+th.bchain{text-align:left;vertical-align:top;background:var(--surface);border-left:4px solid var(--cc);min-width:120px;font-size:14px;color:var(--ink)}
+.bgroup.alt th.bchain{background:#FCFAF6}
+th.bchain span{display:block;font-family:var(--display);font-weight:700;font-size:16px}
+th.bchain small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
+
 /* Resultados */
 .results{margin-top:40px;display:flex;flex-direction:column;gap:18px;scroll-margin-top:16px}
 .results>h2{font-size:28px;font-weight:800;color:var(--ink)}
@@ -231,13 +252,17 @@ tfoot tr:last-child td{font-size:14.5px}
         <ul class="items" id="items"></ul>
       </section>
       <section id="pago">
-        <span class="lbl">¿Con qué podés pagar? <small>· elegí todos los que tengas</small></span>
-        <div class="chips" id="pays"></div>
+        <div class="payhead"><span class="lbl" style="margin:0">¿Con qué querés pagar?</span>
+          <span class="paybtns"><button class="link" type="button" id="payAll">Seleccionar todos</button><button class="link" type="button" id="payNone">Deseleccionar todos</button></span></div>
+        <div id="pays"></div>
         <div class="field">
           <div><label class="lbl" for="day">Día de compra</label><select id="day"></select></div>
-          <div><label class="lbl" for="min">Dividir si ahorro más de</label><input id="min" type="number" min="0" step="500" inputmode="numeric"></div>
+          <div><span class="lblrow"><label class="lbl" for="min">Dividir si ahorro más de</label>
+            <span class="tip"><button type="button" class="tipbtn" aria-label="¿Qué es dividir la compra?" aria-describedby="tipMin">?</button>
+            <span class="tiptxt" role="tooltip" id="tipMin">A veces conviene comprar una parte en un súper y otra parte en otro, porque cada producto está más barato en un lugar distinto. Como eso implica ir a dos lugares, solo te sugerimos dividir si te ahorrás más que este monto. Si el ahorro es menor, te recomendamos comprar todo en un solo súper.</span></span></span>
+          <input id="min" type="number" min="0" step="500" inputmode="numeric"></div>
         </div>
-        <p class="hint">Sumamos el mejor descuento vigente de los medios que elijas. Si tenés tarjeta de Galicia, Santander, BBVA, Macro, Nación u otro banco que funcione con MODO, elegí tu banco y también te aplicamos las promos de MODO.</p>
+        <p class="hint">Sumamos el mejor descuento vigente de los medios que elijas. Si elegís un banco que funciona con MODO (Galicia, Santander, BBVA, Macro, Nación y otros), también te aplicamos las promos de MODO. Las promos para "cualquier billetera virtual" se aplican solas si elegís alguna billetera.</p>
       </section>
       <section class="verdict" id="verdict" aria-live="polite"></section>
     </aside>
@@ -247,7 +272,9 @@ tfoot tr:last-child td{font-size:14.5px}
     <h2>Dónde te <span>conviene</span></h2>
     <div class="panel"><h3>Total por supermercado</h3><div class="rank" id="rank"></div>
       <p class="note">Incluye las promos que cada cadena informó en la mayoría de sus sucursales de CABA y el mejor descuento de tus medios de pago para el día elegido, respetando el tope de reintegro.</p></div>
-    <div class="panel" id="splitPanel"><h3 id="splitTitle">Compra dividida</h3><div class="split" id="split"></div></div>
+    <div class="panel" id="splitPanel"><div class="lblrow" style="margin-bottom:14px"><h3 id="splitTitle" style="margin:0">Compra dividida</h3>
+      <span class="tip"><button type="button" class="tipbtn" aria-label="¿Cómo funciona la compra dividida?" aria-describedby="tipSplit">?</button>
+      <span class="tiptxt" role="tooltip" id="tipSplit">Buscamos los dos súper con los que más ahorrás si repartís tu lista: cada producto va al súper donde está más barato. Los descuentos de tus medios de pago se calculan por separado en cada súper, cada uno con su tope. Solo te lo recomendamos si el ahorro supera el monto que elegiste en "Dividir si ahorro más de".</span></span></div><div class="split" id="split"></div></div>
     <div class="panel"><h3>Producto por producto</h3><div class="tblwrap"><table id="tbl"></table></div>
       <div class="legend"><span><i style="background:var(--green-soft);border:1px solid var(--green)"></i>Precio más bajo</span><span><i style="background:var(--bordo-soft);border:1px solid var(--bordo)"></i>Promo vigente</span></div>
       <p class="note">En "Cualquier marca" se toma la opción más barata de cada súper, por eso la marca puede cambiar entre cadenas.</p></div>
@@ -279,11 +306,17 @@ const DAYS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"
 // Promos bancarias cargadas en la planilla (vienen en data.json)
 const BANK=(D.promos||[]);
 const MB=D.modo_bancos||[]; // bancos cuyas tarjetas sirven para las promos de MODO
-const PAYS=[...new Set([...BANK.map(r=>r.m),...(BANK.some(r=>r.m==="MODO")?MB:[])])].sort((a,b)=>a.localeCompare(b,"es")).map(m=>[m,m]);
+const ANY_WALLET="Billetera virtual (cualquiera)";
+const WALLETS=["MODO","Mercado Pago","Cuenta DNI","Naranja X","Personal Pay","Yoy","Ualá","BNA+"];
+const STORE_CARDS=["CencoPay","Tarjeta Carrefour","Cuenta Digital Carrefour","MasClub","Tarjeta Coto","Comunidad Coto","Mi Carrefour"];
+const payGroup=m=>WALLETS.includes(m)?"wallet":STORE_CARDS.includes(m)?"store":"bank";
+const PAYS=[...new Set([...BANK.map(r=>r.m),...(BANK.some(r=>r.m==="MODO")?MB:[]),...(BANK.some(r=>r.m===ANY_WALLET)?["Mercado Pago","MODO"]:[])])]
+  .filter(m=>m!==ANY_WALLET).sort((a,b)=>a.localeCompare(b,"es")).map(m=>[m,m]);
 // ¿la promo aplica con los medios elegidos? Devuelve "" si aplica directo, el banco si aplica vía MODO, o null
 function viaFor(r){
   if(state.pays.includes(r.m))return "";
   if(r.m==="MODO"){const b=state.pays.find(x=>MB.includes(x));if(b)return b}
+  if(r.m===ANY_WALLET){const w=state.pays.find(x=>WALLETS.includes(x));if(w)return w}
   return null;
 }
 
@@ -414,9 +447,14 @@ function renderCart(){
     :`<li class="emptyli">Tu changuito está vacío. Agregá productos desde la góndola.</li>`;
   const units=state.cart.reduce((s,l)=>s+l.qty,0);
   document.querySelector(".cart-head h2").innerHTML=`Tu changuito <span style="font-family:var(--body);font-size:13px;font-weight:500;color:var(--muted)">${units} ${units===1?"unidad":"unidades"}</span>`;
-  $("pays").innerHTML=PAYS.length?PAYS.map(([id,n])=>`<button class="chip" type="button" data-pay="${esc(id)}" aria-pressed="${state.pays.includes(id)}">${esc(n)}</button>`).join(""):`<span class="hint" style="margin:0">Todavía no hay promos bancarias cargadas.</span>`;
+  const groups=[["bank","Bancos"],["wallet","Billeteras"],["store","Tarjetas y clubes del súper"]];
+  $("pays").innerHTML=PAYS.length?groups.map(([g,t])=>{const ms=PAYS.filter(([m])=>payGroup(m)===g);if(!ms.length)return "";
+    return `<div class="paygroup"><div class="paygt">${t}</div><div class="chips">${ms.map(([id,n])=>`<button class="chip" type="button" data-pay="${esc(id)}" aria-pressed="${state.pays.includes(id)}">${esc(n)}</button>`).join("")}</div></div>`}).join("")
+    :`<span class="hint" style="margin:0">Todavía no hay promos bancarias cargadas.</span>`;
 }
-function ruleTxt(r,via){return `${r.p}% con ${esc(r.m)}${via?` (con tu tarjeta ${esc(via)})`:""}`}
+function ruleTxt(r,via){
+  if(r.m===ANY_WALLET)return `${r.p}% con billetera virtual${via?` (con ${esc(via)})`:""}`;
+  return `${r.p}% con ${esc(r.m)}${via?` (con tu tarjeta ${esc(via)})`:""}`}
 // avisos cortos de las condiciones importantes de una promo
 function promoTags(r,capped){
   const t=[];
@@ -464,13 +502,18 @@ function renderResults(){
     <div class="tot num">${money(s.total)} ${i===0?`<span class="pill">Más barato</span>`:""}${missTxt(s.missing)}<small>${s.disc?`−${money(s.disc)} · ${ruleTxt(s.rule,s.via)}${s.rule.hasta?` · hasta el ${s.rule.hasta}`:""}${s.capped?` · <span style="color:var(--warn)">tope alcanzado</span>`:""}`:(s.near?`Te faltan ${money(s.near.falta)} para el ${ruleTxt(s.near.rule,s.near.via)}`:(state.pays.length?"Sin promo para tus medios de pago este día":"Elegí tus medios de pago para ver descuentos"))}</small></div></div>`).join("");
 
   const sp=R.bestSplit;
-  if(sp){
-    $("splitTitle").textContent=R.doSplit?`Compra dividida recomendada: ahorrás ${money(R.saving)}`:`Compra dividida: ahorrarías ${money(Math.max(0,R.saving))} (por debajo de tu mínimo)`;
+  if(sp&&R.doSplit){
+    $("splitTitle").textContent=`Te conviene dividir: ahorrás ${money(R.saving)}`;
     const col=(t,L)=>`<div class="col"><h4><span><span class="dot" style="display:inline-block;background:var(--c-${t.chain});margin-right:6px"></span>${cname(t.chain)}</span><span class="num">${money(t.total)}</span></h4>
       <ul>${L.map(l=>{const b=pick(l,t.chain);return `<li>${qtyTxt(l)} ${esc(PBY[l.pid].name)} <span style="color:var(--muted)">${b.v.brand==="A granel"?"":esc(b.v.brand)}</span></li>`}).join("")}</ul>
       ${t.disc?`<p class="note" style="margin-top:8px">−${money(t.disc)} · ${ruleTxt(t.rule,t.via)}</p><div class="ptags" style="margin-top:6px">${promoTags(t.rule,t.capped)}</div>`:""}</div>`;
     $("split").innerHTML=col(sp.a,sp.A)+col(sp.b,sp.B);
-  }else{$("splitTitle").textContent="Compra dividida";$("split").innerHTML=`<p class="note">Con esta lista no hay una combinación de dos súper que sirva.</p>`}
+  }else{
+    $("splitTitle").textContent="No te conviene dividir la compra";
+    $("split").innerHTML=`<p class="note" style="margin:0">${sp&&R.saving>0
+      ?`Repartiendo la lista entre ${cname(sp.a.chain)} y ${cname(sp.b.chain)} ahorrarías solo ${money(R.saving)}, menos que tu mínimo de ${money(state.min)}. Te conviene comprar todo en ${cname(R.bestSingle.chain)}. Si querés ver la división igual, bajá el monto en "Dividir si ahorro más de".`
+      :`Con esta lista, comprar en dos súper no te ahorra nada: te conviene comprar todo en ${cname(R.bestSingle.chain)}.`}</p>`;
+  }
 
   const head=`<thead><tr><th>Producto</th>${CHAINS.map(c=>`<th>${c.name}</th>`).join("")}</tr></thead>`;
   const body=state.cart.map(l=>{const{p,b}=lineLabel(l);const picks=CHAINS.map(c=>pick(l,c.id));
@@ -486,10 +529,17 @@ function renderResults(){
   $("tbl").innerHTML=head+"<tbody>"+body+"</tbody>"+foot;
 }
 function renderBank(){
-  $("bankTbl").innerHTML=BANK.length?`<thead><tr><th>Súper</th><th>Medio de pago</th><th>Descuento</th><th>Días</th><th>Tope</th><th>Compra mínima</th><th>Vigencia y condiciones</th><th>Fuente</th></tr></thead><tbody>${BANK.map(r=>{
-    const act=viaFor(r)!==null&&r.d.includes(state.day);
-    return `<tr><td>${cname(r.c)} ${act?`<span class="pill">Aplica</span>`:""}</td><td style="text-align:left">${esc(r.m)}</td><td class="num">${r.p}%</td><td style="text-align:left">${r.d.length===7?"Todos":r.d.map(d=>DAYS[d].slice(0,3)).join(", ")}</td><td class="num">${r.tope?money(r.tope):"Sin tope"}</td><td class="num">${r.min?money(r.min):"—"}</td><td style="text-align:left">${[r.hasta?"Hasta el "+r.hasta:"",esc(r.cond||"")].filter(Boolean).join(" · ")||"—"}</td><td>${r.fuente?`<a href="${esc(r.fuente)}" target="_blank" rel="noopener">Ver</a>`:"—"}</td></tr>`}).join("")}</tbody>`
-    :`<tbody><tr><td style="text-align:left">Todavía no hay promos bancarias cargadas.</td></tr></tbody>`;
+  if(!BANK.length){$("bankTbl").innerHTML=`<tbody><tr><td style="text-align:left">Todavía no hay promos bancarias cargadas.</td></tr></tbody>`;return}
+  const order=CHAINS.map(c=>c.id), byChain=order.map(c=>[c,BANK.filter(r=>r.c===c)]).filter(([,rs])=>rs.length);
+  const days=r=>r.d.length===7?"Todos":r.d.map(d=>DAYS[d].slice(0,3)).join(", ");
+  $("bankTbl").innerHTML=`<thead><tr><th>Súper</th><th>Medio de pago</th><th>Descuento</th><th>Días</th><th>Tope</th><th>Compra mínima</th><th>Vigencia y condiciones</th><th>Fuente</th></tr></thead>`+
+    byChain.map(([c,rs],gi)=>`<tbody class="bgroup${gi%2?" alt":""}">${rs.map((r,k)=>{
+      const via=viaFor(r), act=via!==null&&r.d.includes(state.day);
+      return `<tr>${k===0?`<th class="bchain" rowspan="${rs.length}" scope="rowgroup" style="--cc:var(--c-${c})"><span>${cname(c)}</span><small>${rs.length} ${rs.length===1?"promo":"promos"}</small></th>`:""}
+        <td style="text-align:left">${r.m===ANY_WALLET?"Cualquier billetera virtual":esc(r.m)} ${act?`<span class="pill">Aplica hoy</span>`:""}</td><td class="num"><b>${r.p}%</b></td><td style="text-align:left">${days(r)}</td>
+        <td class="num">${r.tope?money(r.tope):"Sin tope"}</td><td class="num">${r.min?money(r.min):"—"}</td>
+        <td style="text-align:left">${[r.hasta?"Hasta el "+r.hasta:"",esc(r.cond||"")].filter(Boolean).join(" · ")||"—"}</td>
+        <td>${r.fuente?`<a href="${esc(r.fuente)}" target="_blank" rel="noopener">Ver</a>`:"—"}</td></tr>`}).join("")}</tbody>`).join("");
 }
 function renderAll(){renderAisles();renderShelf();renderCart();renderResults();renderBank()}
 function refreshCart(){save();renderShelf();renderCart();renderResults();renderBank()}
@@ -510,6 +560,8 @@ document.addEventListener("click",e=>{
   else if(t.dataset.ld!==undefined){const l=state.cart[+t.dataset.ld];if(l.qty>1)l.qty--;else state.cart.splice(+t.dataset.ld,1);refreshCart()}
   else if(t.dataset.rm!==undefined){state.cart.splice(+t.dataset.rm,1);refreshCart()}
   else if(t.dataset.pay){const m=t.dataset.pay;state.pays=state.pays.includes(m)?state.pays.filter(x=>x!==m):[...state.pays,m];refreshCart()}
+  else if(t.id==="payAll"){state.pays=PAYS.map(p=>p[0]);refreshCart()}
+  else if(t.id==="payNone"){state.pays=[];refreshCart()}
   else if(t.id==="clear"){state.cart=[];refreshCart()}
 });
 let qT;$("q").addEventListener("input",e=>{clearTimeout(qT);qT=setTimeout(()=>{state.q=e.target.value;state.limit=36;renderAisles();renderShelf()},150)});
