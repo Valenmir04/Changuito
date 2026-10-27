@@ -1,3 +1,10 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#7A1F2B">
+<meta name="description" content="Armá tu lista del súper y compará precios reales de Coto, Día, Carrefour, Jumbo, Disco, Vea y ChangoMás en CABA, con las promos bancarias de cada día.">
+<style>html{-webkit-text-size-adjust:100%;text-size-adjust:100%}:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 <title>Changuito</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -151,7 +158,8 @@ header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-
 .tipbtn{width:20px;height:20px;border-radius:50%;border:1.5px solid var(--navy);background:var(--surface);color:var(--navy);font-size:12px;font-weight:700;line-height:1;cursor:help;padding:0;display:grid;place-items:center}
 .tipbtn:hover,.tipbtn:focus-visible{background:var(--navy);color:#fff}
 .tiptxt{position:absolute;z-index:30;top:calc(100% + 8px);right:-10px;width:min(280px,78vw);background:var(--ink);color:#fff;font-size:13px;font-weight:500;line-height:1.45;border-radius:10px;padding:10px 12px;box-shadow:0 8px 24px rgba(30,36,48,.18);opacity:0;visibility:hidden;pointer-events:none;text-transform:none;letter-spacing:0}
-.tip:hover .tiptxt,.tip:focus-within .tiptxt{opacity:1;visibility:visible}
+.tiptxt{display:none}
+.tip:hover .tiptxt,.tip:focus-within .tiptxt,.tip.open .tiptxt{display:block;opacity:1;visibility:visible}
 #splitPanel .tiptxt{left:-10px;right:auto}
 .bgroup.alt td{background:#FCFAF6}
 .bgroup tr:first-child td,.bgroup tr:first-child th{border-top:2px solid var(--line-strong)}
@@ -208,6 +216,7 @@ tfoot tr:last-child td{font-size:14.5px}
 .toast.show{opacity:1;transform:translate(-50%,0)}
 @media (prefers-reduced-motion:no-preference){.toast{transition:opacity .2s,transform .2s}.bar i{transition:width .35s ease}}
 
+.mcards{display:none}
 .mbar{display:none}
 @media (max-width:940px){
   .mbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:5;gap:10px;align-items:center;justify-content:space-between;
@@ -217,7 +226,89 @@ tfoot tr:last-child td{font-size:14.5px}
   .mbar span{min-width:0;font-size:13.5px}
   .mbar span b{color:var(--green)}
   .toast{bottom:calc(84px + env(safe-area-inset-bottom,0px))}
+  .mbar a{flex:0 0 auto}
 }
+
+/* ---------- Celular ---------- */
+@media (max-width:700px){
+  body{font-size:15.5px;padding-bottom:110px}
+  header.top{padding-block:18px 12px}
+  .brand h1{font-size:28px}
+  .databadge{font-size:12.5px;padding:5px 12px 5px 9px}
+  /* pasos: una fila compacta */
+  .steps{grid-template-columns:repeat(3,minmax(0,1fr));gap:6px;margin-bottom:16px}
+  .steps a{flex-direction:column;align-items:flex-start;gap:6px;padding:9px 10px}
+  .steps strong{font-size:12.5px}
+  .steps .n{width:22px;height:22px;font-size:12px}
+  /* buscador y pasillos */
+  .search input{font-size:16px;padding:12px 12px 12px 40px}
+  .aisle{padding:8px 14px}
+  /* góndola: dos columnas, tarjetas compactas */
+  .shelf{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+  .prod{padding:10px;gap:8px;border-radius:12px}
+  .tile{display:none}
+  .prod{border-top:4px solid var(--line-strong)}
+  .prod.added{border-top-color:var(--green)}
+  .prod h3{font-size:14px}
+  .prod .pres{font-size:12px}
+  .price b{font-size:20px}
+  .prod select{font-size:14px;padding:8px 6px}
+  .prod .row{flex-direction:column;align-items:stretch;gap:6px}
+  .step{justify-content:space-between}
+  .step button{width:40px;height:40px;font-size:20px}
+  .step input{flex:1;height:40px;font-size:16px}
+  .btn{min-height:42px;font-size:15px}
+  .incart{position:static;align-self:flex-start;font-size:11px;padding:2px 8px;order:-1}
+  /* changuito */
+  .cart section{padding:14px}
+  .items{max-height:none}
+  .chip{padding:8px 13px;font-size:14px}
+  .step.sm button{width:36px;height:36px}
+  .items .x{width:36px;height:36px}
+  .field select,.field input{font-size:16px;padding:10px}
+  .verdict .big{font-size:32px}
+  /* globitos de ayuda: fijos abajo, a lo ancho de la pantalla */
+  .tiptxt{position:fixed;left:16px;right:16px;top:auto;width:auto;bottom:calc(96px + env(safe-area-inset-bottom,0px));font-size:14px;padding:12px 14px}
+  .tipbtn{width:26px;height:26px;font-size:14px}
+  /* resultados */
+  .results{margin-top:28px;gap:14px}
+  .results>h2{font-size:24px}
+  .panel{padding:14px}
+  .rk{grid-template-columns:minmax(0,1fr) auto;gap:4px 10px}
+  .rk .bar{grid-column:1/-1;grid-row:2}
+  .rk .tot{grid-column:1/-1;text-align:left!important;font-size:17px}
+  .rk.first{margin:-6px -6px 0;padding:8px 6px}
+  /* tablas -> tarjetas */
+  .tblwrap.desk{display:none}
+  .mcards{display:flex;flex-direction:column;gap:10px}
+  .pcard{border:1px solid var(--line);border-radius:var(--r-sm);padding:12px;background:var(--bg)}
+  .pcard-h b{display:block;font-size:15px}
+  .pcard-h span{display:block;color:var(--muted);font-size:12.5px;margin-top:1px}
+  .pcard-g{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin-top:10px}
+  .pcell{background:var(--surface);border:1px solid var(--line);border-radius:8px;padding:7px 9px;display:flex;flex-direction:column;gap:1px;min-width:0}
+  .pcell.best{background:var(--green-soft);border-color:var(--green)}
+  .pcell.best .pc-p{color:var(--green)}
+  .pcell.na{grid-column:1/-1;color:var(--muted);font-size:12.5px;background:transparent;border-style:dashed}
+  .pc-n{font-size:12.5px;color:var(--muted);display:flex;align-items:center;gap:5px}
+  .pc-n .dot{width:8px;height:8px;border-radius:3px}
+  .pc-p{font-weight:700;font-size:16px}
+  .pc-b{font-size:11.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .pcell .promo{align-self:flex-start;margin-top:3px;font-size:10.5px;font-weight:700;background:var(--bordo-soft);color:var(--bordo);border-radius:4px;padding:1px 6px}
+  .bcard{border:1px solid var(--line);border-left:5px solid var(--cc);border-radius:var(--r-sm);overflow:hidden}
+  .bcard-h{display:flex;justify-content:space-between;align-items:baseline;padding:10px 12px;background:var(--soft)}
+  .bcard-h b{font-family:var(--display);font-size:17px}
+  .bcard-h span{font-size:12.5px;color:var(--muted)}
+  .bitem{padding:10px 12px;border-top:1px solid var(--line)}
+  .bi-top{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
+  .bi-pct{font-family:var(--display);font-size:20px;color:var(--bordo)}
+  .bi-m{font-weight:600}
+  .split{grid-template-columns:minmax(0,1fr)}
+  /* barra de abajo */
+  .mbar{flex-wrap:nowrap}
+  .mbar span{font-size:13px;line-height:1.3}
+  .mbar a{padding:10px 14px}
+}
+@media (max-width:360px){.shelf{grid-template-columns:minmax(0,1fr)}.steps small{display:none}}
 </style>
 
 <div class="wrap">
@@ -275,10 +366,10 @@ tfoot tr:last-child td{font-size:14.5px}
     <div class="panel" id="splitPanel"><div class="lblrow" style="margin-bottom:14px"><h3 id="splitTitle" style="margin:0">Compra dividida</h3>
       <span class="tip"><button type="button" class="tipbtn" aria-label="¿Cómo funciona la compra dividida?" aria-describedby="tipSplit">?</button>
       <span class="tiptxt" role="tooltip" id="tipSplit">Buscamos los dos súper con los que más ahorrás si repartís tu lista: cada producto va al súper donde está más barato. Los descuentos de tus medios de pago se calculan por separado en cada súper, cada uno con su tope. Solo te lo recomendamos si el ahorro supera el monto que elegiste en "Dividir si ahorro más de".</span></span></div><div class="split" id="split"></div></div>
-    <div class="panel"><h3>Producto por producto</h3><div class="tblwrap"><table id="tbl"></table></div>
+    <div class="panel"><h3>Producto por producto</h3><div class="tblwrap desk"><table id="tbl"></table></div><div class="mcards" id="tblCards"></div>
       <div class="legend"><span><i style="background:var(--green-soft);border:1px solid var(--green)"></i>Precio más bajo</span><span><i style="background:var(--bordo-soft);border:1px solid var(--bordo)"></i>Promo vigente</span></div>
       <p class="note">En "Cualquier marca" se toma la opción más barata de cada súper, por eso la marca puede cambiar entre cadenas.</p></div>
-    <div class="panel"><h3>Promos bancarias vigentes</h3><div class="tblwrap"><table id="bankTbl"></table></div>
+    <div class="panel"><h3>Promos bancarias vigentes</h3><div class="tblwrap desk"><table id="bankTbl"></table></div><div class="mcards" id="bankCards"></div>
       <p class="note">Estas promos no vienen en SEPA: se cargan a mano. Revisá siempre las condiciones en el banco o la billetera antes de pagar.</p></div>
     <p class="note">Fuente de precios: <a href="https://datos.produccion.gob.ar/dataset/sepa-precios" target="_blank" rel="noopener">SEPA, Secretaría de Comercio</a> (licencia CC BY 4.0), datos del <span data-fecha></span>. Se toma el precio más repetido de cada cadena; puede variar según la sucursal y cambiar día a día.</p>
   </section>
@@ -527,6 +618,12 @@ function renderResults(){
     <tr><td>Desc. medio de pago</td>${R.singles.map(s=>`<td class="num">${s.disc?"−"+money(s.disc):"—"}</td>`).join("")}</tr>
     <tr><td>Total</td>${R.singles.map(s=>`<td class="num ${s.chain===bs.chain?"best":""}">${s.chain===bs.chain?"<strong>":""}${money(s.total)}${s.chain===bs.chain?"</strong>":""}</td>`).join("")}</tr></tfoot>`;
   $("tbl").innerHTML=head+"<tbody>"+body+"</tbody>"+foot;
+  $("tblCards").innerHTML=state.cart.map(l=>{const{p,b}=lineLabel(l);
+    const opts=CHAINS.map(c=>({c,x:pick(l,c.id)})).filter(o=>o.x).sort((a,b)=>a.x.cost-b.x.cost);
+    const m=opts.length?opts[0].x.cost:0;
+    return `<div class="pcard"><div class="pcard-h"><b>${qtyTxt(l)} ${esc(p.name)}</b><span>${[p.pres,b].filter(Boolean).map(esc).join(" · ")}</span></div>
+      <div class="pcard-g">${opts.map(({c,x})=>`<div class="pcell${x.cost===m?" best":""}"><span class="pc-n"><i class="dot" style="background:var(--c-${c.id})"></i>${c.name}</span><span class="pc-p num">${money(x.cost)}</span>${x.pr.promo?`<span class="promo">${esc(x.pr.promo)}</span>`:""}${l.vid==="any"?`<span class="pc-b">${esc(x.v.brand)}</span>`:""}</div>`).join("")}
+      ${CHAINS.length>opts.length?`<div class="pcell na">No lo tienen: ${CHAINS.filter(c=>!opts.some(o=>o.c.id===c.id)).map(c=>c.name).join(", ")}</div>`:""}</div></div>`}).join("");
 }
 function renderBank(){
   if(!BANK.length){$("bankTbl").innerHTML=`<tbody><tr><td style="text-align:left">Todavía no hay promos bancarias cargadas.</td></tr></tbody>`;return}
@@ -541,12 +638,28 @@ function renderBank(){
         <td style="text-align:left">${[r.hasta?"Hasta el "+r.hasta:"",esc(r.cond||"")].filter(Boolean).join(" · ")||"—"}</td>
         <td>${r.fuente?`<a href="${esc(r.fuente)}" target="_blank" rel="noopener">Ver</a>`:"—"}</td></tr>`}).join("")}</tbody>`).join("");
 }
-function renderAll(){renderAisles();renderShelf();renderCart();renderResults();renderBank()}
-function refreshCart(){save();renderShelf();renderCart();renderResults();renderBank()}
+function renderBankCards(){
+  const el=$("bankCards");
+  if(!BANK.length){el.innerHTML=`<p class="note">Todavía no hay promos bancarias cargadas.</p>`;return}
+  const days=r=>r.d.length===7?"Todos los días":r.d.map(d=>DAYS[d].slice(0,3)).join(", ");
+  el.innerHTML=CHAINS.map(c=>[c,BANK.filter(r=>r.c===c.id)]).filter(([,rs])=>rs.length).map(([c,rs])=>`<div class="bcard" style="--cc:var(--c-${c.id})">
+    <div class="bcard-h"><b>${c.name}</b><span>${rs.length} ${rs.length===1?"promo":"promos"}</span></div>
+    ${rs.map(r=>{const act=viaFor(r)!==null&&r.d.includes(state.day);
+      return `<div class="bitem"><div class="bi-top"><b class="bi-pct">${r.p}%</b><span class="bi-m">${r.m===ANY_WALLET?"Cualquier billetera virtual":esc(r.m)}</span>${act?`<span class="pill">Aplica hoy</span>`:""}</div>
+        <div class="ptags"><span class="ptag">${days(r)}</span><span class="ptag">${r.tope?"Tope "+money(r.tope):"Sin tope"}</span>${r.min?`<span class="ptag">Mínimo ${money(r.min)}</span>`:""}${r.hasta?`<span class="ptag">Hasta el ${r.hasta}</span>`:""}</div>
+        ${r.cond||r.fuente?`<p class="pnote">${esc(r.cond||"")}${r.fuente?` ${r.cond?"· ":""}<a href="${esc(r.fuente)}" target="_blank" rel="noopener">Ver fuente</a>`:""}</p>`:""}</div>`}).join("")}</div>`).join("");
+}
+function renderAll(){renderAisles();renderShelf();renderCart();renderResults();renderBank();renderBankCards()}
+function refreshCart(){save();renderShelf();renderCart();renderResults();renderBank();renderBankCards()}
 
 $("day").innerHTML=DAYS.map((d,i)=>`<option value="${i}">${d}${i===today?" (hoy)":""}</option>`).join("");
 $("day").value=state.day;$("min").value=state.min;$("q").value="";
 
+document.addEventListener("click",e=>{
+  const b=e.target.closest(".tipbtn");
+  document.querySelectorAll(".tip.open").forEach(t=>{if(!b||t!==b.parentElement)t.classList.remove("open")});
+  if(b)b.parentElement.classList.toggle("open");
+});
 let toastT;function toast(msg){const el=$("toast");el.textContent=msg;el.classList.add("show");clearTimeout(toastT);toastT=setTimeout(()=>el.classList.remove("show"),2200)}
 document.addEventListener("click",e=>{
   const t=e.target.closest("button");if(!t)return;
@@ -565,7 +678,7 @@ document.addEventListener("click",e=>{
   else if(t.id==="clear"){state.cart=[];refreshCart()}
 });
 let qT;$("q").addEventListener("input",e=>{clearTimeout(qT);qT=setTimeout(()=>{state.q=e.target.value;state.limit=36;renderAisles();renderShelf()},150)});
-$("day").addEventListener("change",e=>{state.day=+e.target.value;renderResults();renderBank()});
+$("day").addEventListener("change",e=>{state.day=+e.target.value;renderResults();renderBank();renderBankCards()});
 $("min").addEventListener("input",e=>{state.min=Math.max(0,+e.target.value||0);save();renderResults()});
 renderAll();
 })();
