@@ -71,6 +71,22 @@ def descargar(destino):
             return (1, 0, "".join(chr(255 - ord(c)) for c in x[2]))
         url = sorted(zs, key=puntaje)[0][1]
     print("Descargando", url, file=sys.stderr)
+    if "drive.google.com" in url or "docs.google.com" in url:
+        m = re.search(r"/d/([\w-]{20,})", url) or re.search(r"[?&]id=([\w-]{20,})", url)
+        if not m:
+            sys.exit("El enlace de Google Drive no tiene el formato esperado. Copiá de nuevo el enlace para compartir del archivo.")
+        fid = m.group(1)
+        try:  # descarga directa (confirm=t evita el aviso de "archivo grande")
+            with pedir(f"https://drive.usercontent.google.com/download?id={fid}&export=download&confirm=t", timeout=600) as r, open(destino, "wb") as f:
+                shutil.copyfileobj(r, f, 1024 * 1024)
+        except Exception as e:
+            print("Descarga directa falló:", e, file=sys.stderr)
+        if not zipfile.is_zipfile(destino):
+            import gdown  # respaldo: maneja las variantes de confirmación de Drive
+            if not gdown.download(id=fid, output=destino, quiet=False):
+                sys.exit("No pude bajar el archivo de Drive. Revisá que esté compartido como 'Cualquier persona con el enlace'.")
+        print(f"Descargado: {os.path.getsize(destino) / 1e6:.0f} MB", file=sys.stderr)
+        return destino
     with pedir(url, timeout=600) as r, open(destino, "wb") as f:
         shutil.copyfileobj(r, f, 1024 * 1024)
     print(f"Descargado: {os.path.getsize(destino) / 1e6:.0f} MB", file=sys.stderr)
@@ -247,6 +263,8 @@ def main():
         carpeta = a.carpeta
         if not carpeta:
             z = a.zip or descargar(os.path.join(tmp, "sepa.zip"))
+            if not zipfile.is_zipfile(z):
+                sys.exit("El archivo descargado no es un .zip válido. Revisá que en Drive esté el zip de SEPA completo.")
             carpeta = os.path.join(tmp, "x")
             extraer(z, carpeta)
         agg, suc, fecha = agregar(carpeta)
