@@ -169,6 +169,13 @@ th.bchain{text-align:left;vertical-align:top;background:var(--surface);border-le
 th.bchain span{display:block;font-family:var(--display);font-weight:700;font-size:16px}
 th.bchain small{display:block;font-weight:500;color:var(--muted);font-size:12px;margin-top:2px}
 
+.share{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.share .btn{flex:1 1 auto;display:inline-flex;align-items:center;justify-content:center;gap:8px;text-decoration:none;margin:0}
+.btn.wa{background:var(--green);color:#fff}
+.btn.wa:hover{background:#173B2C}
+.share .btn.ghost{flex:0 1 auto}
+.verdict>.btn{background:var(--surface)!important;color:var(--green)!important;border:1.5px solid var(--green)}
+
 /* Resultados */
 .results{margin-top:40px;display:flex;flex-direction:column;gap:18px;scroll-margin-top:16px}
 .results>h2{font-size:28px;font-weight:800;color:var(--ink)}
@@ -353,7 +360,7 @@ tfoot tr:last-child td{font-size:14.5px}
             <span class="tiptxt" role="tooltip" id="tipMin">A veces conviene comprar una parte en un súper y otra parte en otro, porque cada producto está más barato en un lugar distinto. Como eso implica ir a dos lugares, solo te sugerimos dividir si te ahorrás más que este monto. Si el ahorro es menor, te recomendamos comprar todo en un solo súper.</span></span></span>
           <input id="min" type="number" min="0" step="500" inputmode="numeric"></div>
         </div>
-        <p class="hint">Sumamos el mejor descuento vigente de los medios que elijas. Si elegís un banco que funciona con MODO (Galicia, Santander, BBVA, Macro, Nación y otros), también te aplicamos las promos de MODO. Las promos para "cualquier billetera virtual" se aplican solas si elegís alguna billetera.</p>
+        <p class="hint">Sumamos el mejor descuento vigente de los medios que elijas. Si elegís un banco que funciona con MODO (Galicia, Santander, BBVA, Macro, Nación y otros), también te aplicamos las promos de MODO.</p>
       </section>
       <section class="verdict" id="verdict" aria-live="polite"></section>
     </aside>
@@ -554,6 +561,49 @@ function promoTags(r,capped){
   if(r.min)t.push(`<span class="ptag">Compra mínima ${money(r.min)}</span>`);
   return t.join("");
 }
+// ---------- Mensaje para WhatsApp ----------
+const plain=s=>String(s).replace(/<[^>]+>/g,"");
+const waMoney=n=>"$"+Math.round(n).toLocaleString("es-AR");
+function waStore(t,lines){
+  const out=[`*${cname(t.chain)}* (${lines.length} ${lines.length===1?"producto":"productos"})`];
+  for(const l of lines){const b=pick(l,t.chain);if(!b)continue;const p=PBY[l.pid];
+    const det=[p.pres,b.v.brand&&b.v.brand!=="A granel"?b.v.brand:""].filter(Boolean).join(", ");
+    out.push(`• ${l.qty} × ${p.name}${det?` (${det})`:""}: ${waMoney(b.cost)}${b.pr.promo?` [${b.pr.promo}]`:""}`)}
+  if(t.disc){
+    const r=t.rule;
+    out.push(`Subtotal: ${waMoney(t.sub)}`);
+    out.push(`💳 Beneficio: ${plain(ruleTxt(r,t.via))} → -${waMoney(t.disc)}`);
+    const cond=[r.hasta?`Válida hasta el ${r.hasta}`:"",r.tope?`Tope ${waMoney(r.tope)}${t.capped?" (lo alcanzás)":""}`:"Sin tope",r.min?`Compra mínima ${waMoney(r.min)}`:"",r.cond||""].filter(Boolean);
+    out.push(`   ${cond.join(" · ")}`);
+  }else if(t.near){
+    out.push(`💡 Te faltan ${waMoney(t.near.falta)} para el ${plain(ruleTxt(t.near.rule,t.near.via))}`);
+  }
+  out.push(`Total en ${cname(t.chain)}: *${waMoney(t.total)}*`);
+  return out.join("\n");
+}
+function waText(){
+  const R=analyze();if(!R)return "";
+  const bs=R.bestSingle, dia=DAYS[state.day].toLowerCase();
+  const head=[`🛒 *Mi lista del súper* (Changuito)`,`Para comprar el ${dia}`];
+  let body,total;
+  if(R.doSplit){
+    const sp=R.bestSplit;
+    body=[`*Te conviene dividir la compra entre ${cname(sp.a.chain)} y ${cname(sp.b.chain)}*`,"",waStore(sp.a,sp.A),"",waStore(sp.b,sp.B)];
+    total=`💰 *Total aproximado: ${waMoney(sp.total)}*\nAhorrás ${waMoney(R.saving)} frente a comprar todo en ${cname(bs.chain)}.`;
+  }else{
+    body=[`*Te conviene comprar todo en ${cname(bs.chain)}*`,"",waStore(bs,state.cart)];
+    total=`💰 *Total aproximado: ${waMoney(bs.total)}*`;
+  }
+  if(bs.missing.length&&!R.doSplit)body.push(`(No encontramos ${bs.missing.length} producto${bs.missing.length===1?"":"s"} en ${cname(bs.chain)})`);
+  const pie=`Precios de referencia de SEPA del ${fechaTxt}; pueden variar según la sucursal. Confirmá las condiciones de la promo en tu banco o billetera antes de pagar.`;
+  return [...head,"",...body,"",total,"",pie].join("\n");
+}
+function shareBtns(){
+  const txt=waText();if(!txt)return "";
+  return `<div class="share"><a class="btn wa" href="https://wa.me/?text=${encodeURIComponent(txt)}" target="_blank" rel="noopener">
+    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 20.5l1.6-5.4A8.4 8.4 0 1 1 21 11.5z"/></svg>Enviar por WhatsApp</a>
+    <button class="btn ghost" type="button" id="copyList">Copiar lista</button></div>`;
+}
 function promoCard(s){
   if(!s.rule)return "";
   const r=s.rule;
@@ -578,12 +628,12 @@ function renderResults(){
     const s=R.bestSplit;
     const promos=promoCard(s.a)+promoCard(s.b)+nearTxt(s.a)+nearTxt(s.b);
     $("verdict").innerHTML=`<span class="tag">Te conviene dividir la compra</span><div class="big num">${money(s.total)}</div>
-      <p>${s.A.length} productos en <b>${cname(s.a.chain)}</b> y ${s.B.length} en <b>${cname(s.b.chain)}</b>. <span class="save">Ahorrás ${money(R.saving)}</span> frente a comprar todo en ${cname(bs.chain)}.</p>${promos}${promos?REINTEGRO:""}<a class="btn" href="#comparacion">Ver comparación completa</a>`;
+      <p>${s.A.length} productos en <b>${cname(s.a.chain)}</b> y ${s.B.length} en <b>${cname(s.b.chain)}</b>. <span class="save">Ahorrás ${money(R.saving)}</span> frente a comprar todo en ${cname(bs.chain)}.</p>${promos}${promos?REINTEGRO:""}${shareBtns()}<a class="btn" href="#comparacion">Ver comparación completa</a>`;
     $("mbarTxt").innerHTML=`${state.cart.length} productos · Dividir: ${cname(s.a.chain)} + ${cname(s.b.chain)} <b>${money(s.total)}</b>`;
   }else{
     const promos=promoCard(bs)+nearTxt(bs);
     $("verdict").innerHTML=`<span class="tag">Comprá todo en ${cname(bs.chain)}</span><div class="big num">${money(bs.total)}</div>
-      <p>${R.bestSplit&&R.saving>0?`Dividir la compra te ahorraría ${money(R.saving)}, menos que tu mínimo de ${money(state.min)}.`:"Dividir la compra no te ahorra nada."} ${missTxt(bs.missing)}</p>${promos}${promos?REINTEGRO:""}<a class="btn" href="#comparacion">Ver comparación completa</a>`;
+      <p>${R.bestSplit&&R.saving>0?`Dividir la compra te ahorraría ${money(R.saving)}, menos que tu mínimo de ${money(state.min)}.`:"Dividir la compra no te ahorra nada."} ${missTxt(bs.missing)}</p>${promos}${promos?REINTEGRO:""}${shareBtns()}<a class="btn" href="#comparacion">Ver comparación completa</a>`;
     $("mbarTxt").innerHTML=`${state.cart.length} productos · Mejor: ${cname(bs.chain)} <b>${money(bs.total)}</b>`;
   }
   const sorted=[...R.singles].sort((a,b)=>(a.missing.length-b.missing.length)||(a.total-b.total));
@@ -673,6 +723,9 @@ document.addEventListener("click",e=>{
   else if(t.dataset.ld!==undefined){const l=state.cart[+t.dataset.ld];if(l.qty>1)l.qty--;else state.cart.splice(+t.dataset.ld,1);refreshCart()}
   else if(t.dataset.rm!==undefined){state.cart.splice(+t.dataset.rm,1);refreshCart()}
   else if(t.dataset.pay){const m=t.dataset.pay;state.pays=state.pays.includes(m)?state.pays.filter(x=>x!==m):[...state.pays,m];refreshCart()}
+  else if(t.id==="copyList"){const txt=waText();
+    const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Lista copiada")}catch(err){toast("No pudimos copiar la lista")}ta.remove()};
+    try{navigator.clipboard.writeText(txt).then(()=>toast("Lista copiada"),fallback)}catch(err){fallback()}}
   else if(t.id==="payAll"){state.pays=PAYS.map(p=>p[0]);refreshCart()}
   else if(t.id==="payNone"){state.pays=[];refreshCart()}
   else if(t.id==="clear"){state.cart=[];refreshCart()}
