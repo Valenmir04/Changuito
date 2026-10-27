@@ -24,6 +24,8 @@ jobs:
         run: pip install -r requirements.txt
 
       - name: Bajar SEPA y generar data.json
+        env:
+          SEPA_URL: ${{ secrets.SEPA_URL }}
         run: python scripts/actualizar.py
 
       - name: Guardar los precios nuevos
