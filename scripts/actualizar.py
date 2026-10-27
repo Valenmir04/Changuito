@@ -257,6 +257,9 @@ def construir(agg, sucursales, fecha):
 # Supermercado | Medio de pago | Descuento % | Tope $ | Compra mínima $ | Días | Vigente hasta | Condiciones | Fuente
 SUPER = {"coto": "coto", "dia": "dia", "carrefour": "carrefour", "carrefour market": "carrefour", "jumbo": "jumbo",
          "disco": "disco", "vea": "vea", "changomas": "changomas", "chango mas": "changomas", "mas": "changomas"}
+# Bancos cuyas tarjetas sirven para las promos de MODO (si la persona elige uno, se le aplican las de MODO)
+MODO_BANCOS = ["Galicia", "Santander", "BBVA", "Macro", "Banco Nación", "Banco Ciudad", "ICBC", "Supervielle",
+               "Credicoop", "Comafi", "Banco Columbia"]
 DIAS = {"domingo": 0, "lunes": 1, "martes": 2, "miercoles": 3, "jueves": 4, "viernes": 5, "sabado": 6}
 
 def _clave(s):
@@ -347,6 +350,7 @@ def main():
     if a.solo_promos:
         data = json.load(open(a.salida, encoding="utf-8"))
         data["promos"] = leer_promos()
+        data["modo_bancos"] = MODO_BANCOS
         json.dump(data, open(a.salida, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
         return
     tmp = tempfile.mkdtemp(prefix="sepa-")
@@ -361,6 +365,7 @@ def main():
         agg, suc, fecha = agregar(carpeta)
         data = construir(agg, suc, fecha)
         data["promos"] = leer_promos()
+        data["modo_bancos"] = MODO_BANCOS
         with open(a.salida, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         cuenta = {}
