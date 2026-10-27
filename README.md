@@ -23,6 +23,16 @@ Comparador de precios de supermercados de CABA con datos abiertos de SEPA (Secre
 6. **Settings → Pages**: en "Source" elegí **Deploy from a branch**, rama **main**, carpeta **/ (root)**, y guardá. En uno o dos minutos aparece arriba la dirección del sitio (algo como `https://tu-usuario.github.io/changuito/`).
 7. Probá la actualización: **Actions → Actualizar precios → Run workflow**. Tarda unos 10 minutos. Si termina en verde, ya está: se va a repetir sola todos los días a las 10:17.
 
+## Promos bancarias
+
+Están en `scripts/promos.csv`. Todos los lunes, una tarea programada de Claude busca las promos vigentes de las 7 cadenas, actualiza ese archivo y avisa para revisarlo.
+
+Columnas: **Supermercado** (uno o varios: "Jumbo, Disco y Vea", o "Todos"), **Medio de pago**, **Descuento %**, **Tope $** (vacío = sin tope), **Compra mínima $**, **Días** ("Jueves", "Martes, Sábado" o "Todos"), **Vigente hasta** (dd/mm/aaaa; las vencidas se ocultan solas), **Condiciones** y **Fuente**.
+
+Para corregir una promo a mano: abrí `scripts/promos.csv`, tocá el lápiz, editá la fila y guardá con **Commit changes**. Los cambios llegan al sitio en la próxima actualización diaria (o con **Run workflow**).
+
+Las promos de MODO valen para tarjetas de Galicia, Santander, BBVA, Macro, Nación, Ciudad, ICBC, Supervielle, Credicoop, Comafi y Columbia (lista en `MODO_BANCOS`, dentro de `scripts/actualizar.py`).
+
 ## Si algo falla
 
 - Si la actualización termina en rojo, abrí el paso que falló, copiá el mensaje de error y pasáselo a Claude.
