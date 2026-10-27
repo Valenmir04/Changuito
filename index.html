@@ -237,7 +237,7 @@ tfoot tr:last-child td{font-size:14.5px}
           <div><label class="lbl" for="day">Día de compra</label><select id="day"></select></div>
           <div><label class="lbl" for="min">Dividir si ahorro más de</label><input id="min" type="number" min="0" step="500" inputmode="numeric"></div>
         </div>
-        <p class="hint">Sumamos el mejor descuento vigente de los medios que elijas.</p>
+        <p class="hint">Sumamos el mejor descuento vigente de los medios que elijas. Si tenés tarjeta de Galicia, Santander, BBVA, Macro, Nación u otro banco que funcione con MODO, elegí tu banco y también te aplicamos las promos de MODO.</p>
       </section>
       <section class="verdict" id="verdict" aria-live="polite"></section>
     </aside>
@@ -278,7 +278,14 @@ document.querySelectorAll("[data-fecha]").forEach(el=>el.textContent=fechaTxt);
 const DAYS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
 // Promos bancarias cargadas en la planilla (vienen en data.json)
 const BANK=(D.promos||[]);
-const PAYS=[...new Set(BANK.map(r=>r.m))].sort((a,b)=>a.localeCompare(b,"es")).map(m=>[m,m]);
+const MB=D.modo_bancos||[]; // bancos cuyas tarjetas sirven para las promos de MODO
+const PAYS=[...new Set([...BANK.map(r=>r.m),...(BANK.some(r=>r.m==="MODO")?MB:[])])].sort((a,b)=>a.localeCompare(b,"es")).map(m=>[m,m]);
+// ¿la promo aplica con los medios elegidos? Devuelve "" si aplica directo, el banco si aplica vía MODO, o null
+function viaFor(r){
+  if(state.pays.includes(r.m))return "";
+  if(r.m==="MODO"){const b=state.pays.find(x=>MB.includes(x));if(b)return b}
+  return null;
+}
 
 const norm=s=>String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const cellsToP=cells=>{const o={};D.cadenas.forEach((c,i)=>{if(cells[i])o[c]=cells[i]});return o};
@@ -312,17 +319,17 @@ function pick(line,chain){
 }
 function bankFor(chain,sub){
   let best={disc:0,rule:null,capped:false,near:null};
-  for(const r of BANK){if(r.c!==chain||!state.pays.includes(r.m)||!r.d.includes(state.day))continue;
+  for(const r of BANK){if(r.c!==chain||!r.d.includes(state.day))continue;const via=viaFor(r);if(via===null)continue;
     if(r.min&&sub<r.min){ // no llega a la compra mínima: lo guardamos como aviso
       const gain=Math.min(r.min*r.p/100,r.tope||Infinity);
-      if(!best.near||gain>best.near.gain)best.near={rule:r,falta:r.min-sub,gain};continue}
+      if(!best.near||gain>best.near.gain)best.near={rule:r,falta:r.min-sub,gain,via};continue}
     const raw=sub*r.p/100;let d=raw;if(r.tope)d=Math.min(d,r.tope);
-    if(d>best.disc)best={...best,disc:d,rule:r,capped:!!r.tope&&raw>r.tope}}
+    if(d>best.disc)best={...best,disc:d,rule:r,via,capped:!!r.tope&&raw>r.tope}}
   return best;
 }
 function storeTotal(chain,lines){
   let sub=0,missing=[];for(const l of lines){const b=pick(l,chain);if(b)sub+=b.cost;else missing.push(l)}
-  const bk=bankFor(chain,sub);return{chain,sub,disc:bk.disc,rule:bk.rule,capped:bk.capped,near:bk.near,total:sub-bk.disc,missing};
+  const bk=bankFor(chain,sub);return{chain,sub,disc:bk.disc,rule:bk.rule,via:bk.via,capped:bk.capped,near:bk.near,total:sub-bk.disc,missing};
 }
 function analyze(){
   const lines=state.cart;if(!lines.length)return null;
@@ -409,7 +416,7 @@ function renderCart(){
   document.querySelector(".cart-head h2").innerHTML=`Tu changuito <span style="font-family:var(--body);font-size:13px;font-weight:500;color:var(--muted)">${units} ${units===1?"unidad":"unidades"}</span>`;
   $("pays").innerHTML=PAYS.length?PAYS.map(([id,n])=>`<button class="chip" type="button" data-pay="${esc(id)}" aria-pressed="${state.pays.includes(id)}">${esc(n)}</button>`).join(""):`<span class="hint" style="margin:0">Todavía no hay promos bancarias cargadas.</span>`;
 }
-function ruleTxt(r){return `${r.p}% con ${esc(r.m)}`}
+function ruleTxt(r,via){return `${r.p}% con ${esc(r.m)}${via?` (con tu tarjeta ${esc(via)})`:""}`}
 // avisos cortos de las condiciones importantes de una promo
 function promoTags(r,capped){
   const t=[];
@@ -421,7 +428,7 @@ function promoTags(r,capped){
 function promoCard(s){
   if(!s.rule)return "";
   const r=s.rule;
-  return `<div class="pbox"><div class="ph"><b>${cname(s.chain)}:</b> ${ruleTxt(r)} <span class="num">−${money(s.disc)}</span></div>
+  return `<div class="pbox"><div class="ph"><b>${cname(s.chain)}:</b> ${ruleTxt(r,s.via)} <span class="num">−${money(s.disc)}</span></div>
     <div class="ptags">${promoTags(r,s.capped)}</div>
     ${s.capped?`<p class="pnote">Superás el tope: lo que gastes de más ya no tiene descuento.</p>`:""}
     ${r.cond?`<p class="pnote">${esc(r.cond)}</p>`:""}</div>`;
@@ -429,7 +436,7 @@ function promoCard(s){
 function nearTxt(s){
   if(!s.near)return "";
   const n=s.near;
-  return `<p class="pnear">Te faltan <b>${money(n.falta)}</b> para el ${ruleTxt(n.rule)} en ${cname(s.chain)} (compra mínima ${money(n.rule.min)}).</p>`;
+  return `<p class="pnear">Te faltan <b>${money(n.falta)}</b> para el ${ruleTxt(n.rule,n.via)} en ${cname(s.chain)} (compra mínima ${money(n.rule.min)}).</p>`;
 }
 const REINTEGRO=`<p class="pfine">Muchas promos son reintegros: el descuento te lo devuelven después en el resumen o la cuenta. Confirmá las condiciones en tu banco o billetera antes de pagar.</p>`;
 function renderResults(){
@@ -454,14 +461,14 @@ function renderResults(){
   const max=Math.max(...sorted.map(s=>s.sub));
   $("rank").innerHTML=sorted.map((s,i)=>`<div class="rk${i===0?" first":""}"><div class="nm"><span class="dot" style="background:var(--c-${s.chain})"></span><span>${cname(s.chain)}<small style="display:block;font-weight:500;color:var(--muted);font-size:11.5px">${SUC[s.chain]} ${SUC[s.chain]===1?"sucursal":"sucursales"} en CABA</small></span></div>
     <div class="bar" aria-hidden="true"><i style="width:${(s.total/max*100).toFixed(1)}%;background:var(--c-${s.chain})"></i></div>
-    <div class="tot num">${money(s.total)} ${i===0?`<span class="pill">Más barato</span>`:""}${missTxt(s.missing)}<small>${s.disc?`−${money(s.disc)} · ${ruleTxt(s.rule)}${s.rule.hasta?` · hasta el ${s.rule.hasta}`:""}${s.capped?` · <span style="color:var(--warn)">tope alcanzado</span>`:""}`:(s.near?`Te faltan ${money(s.near.falta)} para el ${ruleTxt(s.near.rule)}`:(state.pays.length?"Sin promo para tus medios de pago este día":"Elegí tus medios de pago para ver descuentos"))}</small></div></div>`).join("");
+    <div class="tot num">${money(s.total)} ${i===0?`<span class="pill">Más barato</span>`:""}${missTxt(s.missing)}<small>${s.disc?`−${money(s.disc)} · ${ruleTxt(s.rule,s.via)}${s.rule.hasta?` · hasta el ${s.rule.hasta}`:""}${s.capped?` · <span style="color:var(--warn)">tope alcanzado</span>`:""}`:(s.near?`Te faltan ${money(s.near.falta)} para el ${ruleTxt(s.near.rule,s.near.via)}`:(state.pays.length?"Sin promo para tus medios de pago este día":"Elegí tus medios de pago para ver descuentos"))}</small></div></div>`).join("");
 
   const sp=R.bestSplit;
   if(sp){
     $("splitTitle").textContent=R.doSplit?`Compra dividida recomendada: ahorrás ${money(R.saving)}`:`Compra dividida: ahorrarías ${money(Math.max(0,R.saving))} (por debajo de tu mínimo)`;
     const col=(t,L)=>`<div class="col"><h4><span><span class="dot" style="display:inline-block;background:var(--c-${t.chain});margin-right:6px"></span>${cname(t.chain)}</span><span class="num">${money(t.total)}</span></h4>
       <ul>${L.map(l=>{const b=pick(l,t.chain);return `<li>${qtyTxt(l)} ${esc(PBY[l.pid].name)} <span style="color:var(--muted)">${b.v.brand==="A granel"?"":esc(b.v.brand)}</span></li>`}).join("")}</ul>
-      ${t.disc?`<p class="note" style="margin-top:8px">−${money(t.disc)} · ${ruleTxt(t.rule)}</p><div class="ptags" style="margin-top:6px">${promoTags(t.rule,t.capped)}</div>`:""}</div>`;
+      ${t.disc?`<p class="note" style="margin-top:8px">−${money(t.disc)} · ${ruleTxt(t.rule,t.via)}</p><div class="ptags" style="margin-top:6px">${promoTags(t.rule,t.capped)}</div>`:""}</div>`;
     $("split").innerHTML=col(sp.a,sp.A)+col(sp.b,sp.B);
   }else{$("splitTitle").textContent="Compra dividida";$("split").innerHTML=`<p class="note">Con esta lista no hay una combinación de dos súper que sirva.</p>`}
 
@@ -480,7 +487,7 @@ function renderResults(){
 }
 function renderBank(){
   $("bankTbl").innerHTML=BANK.length?`<thead><tr><th>Súper</th><th>Medio de pago</th><th>Descuento</th><th>Días</th><th>Tope</th><th>Compra mínima</th><th>Vigencia y condiciones</th><th>Fuente</th></tr></thead><tbody>${BANK.map(r=>{
-    const act=state.pays.includes(r.m)&&r.d.includes(state.day);
+    const act=viaFor(r)!==null&&r.d.includes(state.day);
     return `<tr><td>${cname(r.c)} ${act?`<span class="pill">Aplica</span>`:""}</td><td style="text-align:left">${esc(r.m)}</td><td class="num">${r.p}%</td><td style="text-align:left">${r.d.length===7?"Todos":r.d.map(d=>DAYS[d].slice(0,3)).join(", ")}</td><td class="num">${r.tope?money(r.tope):"Sin tope"}</td><td class="num">${r.min?money(r.min):"—"}</td><td style="text-align:left">${[r.hasta?"Hasta el "+r.hasta:"",esc(r.cond||"")].filter(Boolean).join(" · ")||"—"}</td><td>${r.fuente?`<a href="${esc(r.fuente)}" target="_blank" rel="noopener">Ver</a>`:"—"}</td></tr>`}).join("")}</tbody>`
     :`<tbody><tr><td style="text-align:left">Todavía no hay promos bancarias cargadas.</td></tr></tbody>`;
 }
