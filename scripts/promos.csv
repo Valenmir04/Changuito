@@ -1,0 +1,59 @@
+Supermercado,Medio de pago,Descuento %,Tope $,Compra mínima $,Días,Vigente hasta,Condiciones,Fuente
+Coto,Banco Ciudad,25,30000,,Lunes,01/11/2026,Aplican exclusiones,https://baratoya.app/descuentos-supermercados/lunes
+Coto,Banco Columbia,30,,,"Martes, Jueves",01/11/2026,Aplican exclusiones. Jueves: con Visa débito por NFC,https://baratoya.app/descuentos-supermercados/martes
+Coto,Comafi,35,,,Martes,01/11/2026,Aplican exclusiones,https://baratoya.app/descuentos-supermercados/martes
+Coto,Credicoop,30,,,Martes,01/11/2026,Aplican exclusiones,https://baratoya.app/descuentos-supermercados/martes
+Coto,MODO,25,,,Martes,01/11/2026,Aplican exclusiones,https://baratoya.app/descuentos-supermercados/martes
+Coto,Banco Nación,10,7500,,Martes,01/11/2026,Pagando con BNA+ MODO. Se suma al 25% de MODO,https://baratoya.app/descuentos-supermercados/martes
+Coto,Supervielle,30,,,Martes,01/11/2026,Aplican exclusiones,https://baratoya.app/descuentos-supermercados/martes
+Coto,Naranja X,20,3000,,Martes,01/11/2026,Hasta 30% (tope $12.000) según tu plan Naranja X,https://baratoya.app/descuentos-supermercados/martes
+Coto,ICBC,20,,,"Jueves, Sábado, Domingo",01/11/2026,Aplican exclusiones,https://baratoya.app/descuentos-supermercados/jueves
+Coto,Mercado Pago,25,,,Viernes,01/11/2026,Aplican exclusiones,https://baratoya.app/descuentos-supermercados/viernes
+Coto,Mercado Pago,20,,,"Sábado, Domingo",01/11/2026,Aplican exclusiones,https://baratoya.app/descuentos-supermercados/sabado
+Día,Banco Columbia,20,10000,,"Lunes, Viernes",31/03/2027,Solo en sucursales,https://baratoya.app/descuentos-supermercados/lunes
+Día,Cuenta DNI,20,,,Lunes,31/12/2026,Pagando con tarjeta de crédito Visa del Banco Provincia por NFC (celular),https://baratoya.app/descuentos-supermercados/lunes
+Día,Naranja X,20,3000,,Martes,31/10/2026,Hasta 30% (tope $12.000) según tu plan Naranja X,https://baratoya.app/descuentos-supermercados/martes
+Día,Credicoop,25,15000,,Miércoles,31/12/2026,Pagando con MODO,https://baratoya.app/descuentos-supermercados/miercoles
+Día,Personal Pay,15,,20000,Jueves,31/10/2026,,https://baratoya.app/descuentos-supermercados/jueves
+Día,MODO,20,20000,35000,"Viernes, Sábado",31/10/2026,,https://baratoya.app/descuentos-supermercados/viernes
+Día,Banco Nación,10,7500,35000,"Viernes, Sábado",31/12/2026,Pagando con BNA+ MODO. Se suma al 20% de MODO,https://baratoya.app/descuentos-supermercados/viernes
+Carrefour,Mercado Pago,15,15000,,Lunes,31/10/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/lunes
+Carrefour,Tarjeta Carrefour,15,,,Lunes,31/10/2026,Tarjeta Standard Mastercard Carrefour. Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/lunes
+Carrefour,Tarjeta Carrefour,20,,,Martes,31/10/2026,Tarjeta Standard Mastercard Carrefour. Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/martes
+Carrefour,Cuenta DNI,10,,15000,Miércoles,31/10/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/miercoles
+Carrefour,Banco Patagonia,20,,,Miércoles,31/10/2026,Hasta 30% según tu paquete Patagonia. Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/miercoles
+Carrefour,Banco Nación,10,10000,15000,Miércoles,01/11/2026,Pagando con BNA+ MODO. Puede sumar 10% adicional (tope $7.500),https://www.0221.com.ar/promociones-y-descuentos/cuanto-se-puede-ahorrar-supermercados-banco-nacion-y-modo-la-ultima-semana-octubre-n136403
+Carrefour,Mercado Pago,15,,15000,Jueves,31/10/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/jueves
+Carrefour,Mercado Pago,10,,,Viernes,31/10/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/viernes
+Carrefour,Cuenta Digital Carrefour,15,,,Viernes,31/10/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/viernes
+Carrefour,Cuenta Digital Carrefour,10,,,"Sábado, Domingo",31/10/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/sabado
+Jumbo,CencoPay,25,15000,,Lunes,31/10/2026,Excluye electrodomésticos,https://baratoya.app/descuentos-supermercados/lunes
+Jumbo,Banco Hipotecario,25,15000,,Martes,31/10/2026,"Excluye electro, carnes y bodegas",https://baratoya.app/descuentos-supermercados/martes
+Jumbo,Naranja X,20,3000,,Martes,31/10/2026,Hasta 30% (tope $12.000) según tu plan Naranja X,https://baratoya.app/descuentos-supermercados/martes
+Jumbo,MODO,20,25000,100000,"Martes, Jueves",31/10/2026,,https://baratoya.app/descuentos-supermercados/martes
+Jumbo,Banco Patagonia,30,20000,,Sábado,31/10/2026,,https://baratoya.app/descuentos-supermercados/sabado
+Disco,CencoPay,25,15000,,Lunes,31/10/2026,Excluye electrodomésticos,https://baratoya.app/descuentos-supermercados/lunes
+Disco,Banco Hipotecario,25,15000,,Martes,31/10/2026,"Excluye electro, carnes y bodegas",https://baratoya.app/descuentos-supermercados/martes
+Disco,Naranja X,20,3000,,Martes,31/10/2026,Hasta 30% (tope $12.000) según tu plan Naranja X,https://baratoya.app/descuentos-supermercados/martes
+Disco,MODO,20,25000,100000,"Viernes, Sábado",31/10/2026,Tope por banco por mes,https://baratoya.app/descuentos-supermercados/viernes
+Disco,Banco Patagonia,30,20000,,Sábado,31/10/2026,,https://baratoya.app/descuentos-supermercados/sabado
+Vea,CencoPay,25,15000,,Lunes,31/10/2026,Excluye electrodomésticos,https://baratoya.app/descuentos-supermercados/lunes
+Vea,Naranja X,20,3000,,Martes,31/10/2026,Hasta 30% (tope $12.000) según tu plan Naranja X,https://baratoya.app/descuentos-supermercados/martes
+Vea,MODO,20,25000,100000,Viernes,31/10/2026,No disponible en Pilar. Tope por mes,https://baratoya.app/descuentos-supermercados/viernes
+ChangoMás,MODO,20,25000,75000,Lunes,31/10/2026,,https://baratoya.app/descuentos-supermercados/lunes
+ChangoMás,Banco Nación,10,7500,75000,Lunes,31/12/2026,Pagando con BNA+ MODO. Se suma al 20% de MODO,https://baratoya.app/descuentos-supermercados/lunes
+ChangoMás,Banco Columbia,20,10000,,"Martes, Sábado",31/03/2027,,https://baratoya.app/descuentos-supermercados/martes
+ChangoMás,Comafi,20,12000,,Martes,31/10/2026,Pagando con MODO. Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/martes
+ChangoMás,Banco Hipotecario,25,10000,,Martes,30/11/2026,Pagando con MODO,https://baratoya.app/descuentos-supermercados/martes
+ChangoMás,Mercado Pago,15,,,Martes,31/10/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/martes
+ChangoMás,Naranja X,20,3000,,Martes,31/10/2026,Hasta 30% (tope $12.000) según tu plan Naranja X,https://baratoya.app/descuentos-supermercados/martes
+ChangoMás,Banco Nación,35,15000,,Miércoles,31/10/2026,Pagando con BNA+ MODO. Solo en sucursales. Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/miercoles
+ChangoMás,MasClub,15,,,"Miércoles, Jueves",31/10/2026,Para socios MasClub. Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/miercoles
+ChangoMás,Banco Patagonia,20,10000,,Miércoles,31/10/2026,Patagonia 365. Solo en sucursales,https://baratoya.app/descuentos-supermercados/miercoles
+ChangoMás,Credicoop,30,9000,,Jueves,31/12/2026,Pagando con MODO,https://baratoya.app/descuentos-supermercados/jueves
+ChangoMás,Cuenta DNI,20,,,Jueves,31/12/2026,Solo en sucursales,https://baratoya.app/descuentos-supermercados/jueves
+ChangoMás,Banco Ciudad,35,20000,,Jueves,31/12/2026,Con la app Buepp. Solo en sucursales,https://baratoya.app/descuentos-supermercados/jueves
+ChangoMás,ICBC,20,10000,,Jueves,31/12/2026,Pagando con MODO. Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/jueves
+ChangoMás,Yoy,20,10000,,Jueves,31/12/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/jueves
+ChangoMás,Banco Patagonia,20,10000,,Sábado,31/12/2026,Hasta 30% según la tarjeta,https://baratoya.app/descuentos-supermercados/sabado
+ChangoMás,Billetera virtual (cualquiera),15,,,"Sábado, Domingo",31/10/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/sabado
