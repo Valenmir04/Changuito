@@ -130,6 +130,16 @@ header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-
 .verdict .btn:hover{background:#173B2C}
 .verdict.idle{background:var(--soft)}
 
+.pbox{background:var(--surface);border:1px solid var(--line);border-radius:var(--r-sm);padding:10px 12px;margin-top:10px}
+.ph{font-size:14px}
+.ph .num{color:var(--green);font-weight:700;float:right}
+.ptags{display:flex;flex-wrap:wrap;gap:5px;margin-top:7px}
+.ptag{font-size:11.5px;font-weight:600;background:var(--soft);color:var(--ink);border-radius:99px;padding:2px 9px;white-space:nowrap}
+.ptag.hot{background:var(--warn-soft);color:var(--warn)}
+.pnote{font-size:12.5px;color:var(--muted);margin:7px 0 0}
+.pnear{font-size:13px;margin:10px 0 0;background:var(--navy-soft);color:var(--navy);border-radius:var(--r-sm);padding:8px 10px}
+.pfine{font-size:12px;color:var(--muted);margin:10px 0 0;line-height:1.4}
+
 /* Resultados */
 .results{margin-top:40px;display:flex;flex-direction:column;gap:18px;scroll-margin-top:16px}
 .results>h2{font-size:28px;font-weight:800;color:var(--ink)}
@@ -227,7 +237,7 @@ tfoot tr:last-child td{font-size:14.5px}
           <div><label class="lbl" for="day">Día de compra</label><select id="day"></select></div>
           <div><label class="lbl" for="min">Dividir si ahorro más de</label><input id="min" type="number" min="0" step="500" inputmode="numeric"></div>
         </div>
-        <p class="hint">Los descuentos por medio de pago todavía son de ejemplo.</p>
+        <p class="hint">Sumamos el mejor descuento vigente de los medios que elijas.</p>
       </section>
       <section class="verdict" id="verdict" aria-live="polite"></section>
     </aside>
@@ -241,8 +251,8 @@ tfoot tr:last-child td{font-size:14.5px}
     <div class="panel"><h3>Producto por producto</h3><div class="tblwrap"><table id="tbl"></table></div>
       <div class="legend"><span><i style="background:var(--green-soft);border:1px solid var(--green)"></i>Precio más bajo</span><span><i style="background:var(--bordo-soft);border:1px solid var(--bordo)"></i>Promo vigente</span></div>
       <p class="note">En "Cualquier marca" se toma la opción más barata de cada súper, por eso la marca puede cambiar entre cadenas.</p></div>
-    <div class="panel"><h3>Descuentos por medio de pago <span style="font-weight:500;color:var(--muted);font-size:14px">(ejemplo)</span></h3><div class="tblwrap"><table id="bankTbl"></table></div>
-      <p class="note">Estos descuentos no vienen en SEPA. Son ilustrativos hasta que se carguen las promos bancarias vigentes de cada cadena.</p></div>
+    <div class="panel"><h3>Promos bancarias vigentes</h3><div class="tblwrap"><table id="bankTbl"></table></div>
+      <p class="note">Estas promos no vienen en SEPA: se cargan a mano. Revisá siempre las condiciones en el banco o la billetera antes de pagar.</p></div>
     <p class="note">Fuente de precios: <a href="https://datos.produccion.gob.ar/dataset/sepa-precios" target="_blank" rel="noopener">SEPA, Secretaría de Comercio</a> (licencia CC BY 4.0), datos del <span data-fecha></span>. Se toma el precio más repetido de cada cadena; puede variar según la sucursal y cambiar día a día.</p>
   </section>
 </div>
@@ -265,22 +275,10 @@ const TILE={frecuentes:["#F7EAEB","#7A1F2B"],almacen:["#F5E8DC","#7A3E1F"],desay
 // Datos SEPA (Secretaría de Comercio, CC BY 4.0). Cada item: [ean, nombre, marca, pasillo, precios por cadena en el orden de D.cadenas]
 const fechaTxt=D.fecha?D.fecha.split("-").reverse().join("/"):"";
 document.querySelectorAll("[data-fecha]").forEach(el=>el.textContent=fechaTxt);
-const PAYS=[["billetera","Billetera virtual"],["credito","Tarjeta de crédito"],["debito","Tarjeta de débito"],["fidelidad","Tarjeta del súper"]];
 const DAYS=["Domingo","Lunes","Martes","Miércoles","Jueves","Viernes","Sábado"];
-const BANK=[
- {c:"coto",m:"fidelidad",p:10,tope:0,d:[0,1,2,3,4,5,6]},
- {c:"coto",m:"credito",p:20,tope:12000,d:[5]},
- {c:"carrefour",m:"credito",p:20,tope:15000,d:[3]},
- {c:"carrefour",m:"billetera",p:10,tope:6000,d:[1,2]},
- {c:"jumbo",m:"billetera",p:25,tope:10000,d:[4]},
- {c:"jumbo",m:"credito",p:15,tope:9000,d:[1]},
- {c:"dia",m:"debito",p:15,tope:8000,d:[2]},
- {c:"dia",m:"fidelidad",p:8,tope:0,d:[0,1,2,3,4,5,6]},
- {c:"disco",m:"billetera",p:20,tope:10000,d:[2]},
- {c:"vea",m:"debito",p:15,tope:8000,d:[4]},
- {c:"changomas",m:"billetera",p:20,tope:12000,d:[6]},
- {c:"changomas",m:"debito",p:10,tope:7000,d:[1,3]}
-];
+// Promos bancarias cargadas en la planilla (vienen en data.json)
+const BANK=(D.promos||[]);
+const PAYS=[...new Set(BANK.map(r=>r.m))].sort((a,b)=>a.localeCompare(b,"es")).map(m=>[m,m]);
 
 const norm=s=>String(s).normalize("NFD").replace(/[\u0300-\u036f]/g,"").toLowerCase();
 const cellsToP=cells=>{const o={};D.cadenas.forEach((c,i)=>{if(cells[i])o[c]=cells[i]});return o};
@@ -313,14 +311,18 @@ function pick(line,chain){
   return best;
 }
 function bankFor(chain,sub){
-  let best={disc:0,rule:null};
+  let best={disc:0,rule:null,capped:false,near:null};
   for(const r of BANK){if(r.c!==chain||!state.pays.includes(r.m)||!r.d.includes(state.day))continue;
-    let d=sub*r.p/100;if(r.tope)d=Math.min(d,r.tope);if(d>best.disc)best={disc:d,rule:r}}
+    if(r.min&&sub<r.min){ // no llega a la compra mínima: lo guardamos como aviso
+      const gain=Math.min(r.min*r.p/100,r.tope||Infinity);
+      if(!best.near||gain>best.near.gain)best.near={rule:r,falta:r.min-sub,gain};continue}
+    const raw=sub*r.p/100;let d=raw;if(r.tope)d=Math.min(d,r.tope);
+    if(d>best.disc)best={...best,disc:d,rule:r,capped:!!r.tope&&raw>r.tope}}
   return best;
 }
 function storeTotal(chain,lines){
   let sub=0,missing=[];for(const l of lines){const b=pick(l,chain);if(b)sub+=b.cost;else missing.push(l)}
-  const bk=bankFor(chain,sub);return{chain,sub,disc:bk.disc,rule:bk.rule,total:sub-bk.disc,missing};
+  const bk=bankFor(chain,sub);return{chain,sub,disc:bk.disc,rule:bk.rule,capped:bk.capped,near:bk.near,total:sub-bk.disc,missing};
 }
 function analyze(){
   const lines=state.cart;if(!lines.length)return null;
@@ -345,11 +347,12 @@ function analyze(){
 const today=new Date().getDay();
 const DEFAULT={cart:[{pid:"leche",vid:"any",qty:4},{pid:"yerba",vid:"yerba-1",qty:2},{pid:"fideos",vid:"any",qty:3},{pid:"aceite",vid:"any",qty:1},
   {pid:"cola",vid:"cola-0",qty:2},{pid:"jabonliq",vid:"any",qty:1},{pid:"papel",vid:"any",qty:2},{pid:"mayo",vid:"any",qty:1},{pid:"sham",vid:"sham-0",qty:1}],
-  pays:["billetera","debito"],day:today,min:3000,aisle:"frecuentes",q:"",limit:36};
+  pays:[],day:today,min:3000,aisle:"frecuentes",q:"",limit:36};
 let state=JSON.parse(JSON.stringify(DEFAULT));
 try{const s=JSON.parse(localStorage.getItem("changuito-v3")||"null");if(s&&Array.isArray(s.cart))state={...state,...s,day:today}}catch(e){}
 state.cart=state.cart.filter(l=>PBY[l.pid]&&(l.vid==="any"||PBY[l.pid].variants.some(v=>v.vid===l.vid)));
 if(!AISLES.some(a=>a[0]===state.aisle))state.aisle="frecuentes";
+state.pays=(state.pays||[]).filter(m=>PAYS.some(p=>p[0]===m));
 function save(){try{localStorage.setItem("changuito-v3",JSON.stringify({cart:state.cart,pays:state.pays,min:state.min,aisle:state.aisle}))}catch(e){}}
 
 const $=id=>document.getElementById(id);
@@ -404,9 +407,31 @@ function renderCart(){
     :`<li class="emptyli">Tu changuito está vacío. Agregá productos desde la góndola.</li>`;
   const units=state.cart.reduce((s,l)=>s+l.qty,0);
   document.querySelector(".cart-head h2").innerHTML=`Tu changuito <span style="font-family:var(--body);font-size:13px;font-weight:500;color:var(--muted)">${units} ${units===1?"unidad":"unidades"}</span>`;
-  $("pays").innerHTML=PAYS.map(([id,n])=>`<button class="chip" type="button" data-pay="${id}" aria-pressed="${state.pays.includes(id)}">${n}</button>`).join("");
+  $("pays").innerHTML=PAYS.length?PAYS.map(([id,n])=>`<button class="chip" type="button" data-pay="${esc(id)}" aria-pressed="${state.pays.includes(id)}">${esc(n)}</button>`).join(""):`<span class="hint" style="margin:0">Todavía no hay promos bancarias cargadas.</span>`;
 }
-function ruleTxt(r){return `${r.p}% con ${PAYS.find(x=>x[0]===r.m)[1].toLowerCase()}${r.tope?` (tope ${money(r.tope)})`:" (sin tope)"}`}
+function ruleTxt(r){return `${r.p}% con ${esc(r.m)}`}
+// avisos cortos de las condiciones importantes de una promo
+function promoTags(r,capped){
+  const t=[];
+  if(r.hasta)t.push(`<span class="ptag">Válida hasta el ${r.hasta}</span>`);
+  t.push(r.tope?`<span class="ptag${capped?" hot":""}">Tope ${money(r.tope)}${capped?" · lo alcanzás":""}</span>`:`<span class="ptag">Sin tope</span>`);
+  if(r.min)t.push(`<span class="ptag">Compra mínima ${money(r.min)}</span>`);
+  return t.join("");
+}
+function promoCard(s){
+  if(!s.rule)return "";
+  const r=s.rule;
+  return `<div class="pbox"><div class="ph"><b>${cname(s.chain)}:</b> ${ruleTxt(r)} <span class="num">−${money(s.disc)}</span></div>
+    <div class="ptags">${promoTags(r,s.capped)}</div>
+    ${s.capped?`<p class="pnote">Superás el tope: lo que gastes de más ya no tiene descuento.</p>`:""}
+    ${r.cond?`<p class="pnote">${esc(r.cond)}</p>`:""}</div>`;
+}
+function nearTxt(s){
+  if(!s.near)return "";
+  const n=s.near;
+  return `<p class="pnear">Te faltan <b>${money(n.falta)}</b> para el ${ruleTxt(n.rule)} en ${cname(s.chain)} (compra mínima ${money(n.rule.min)}).</p>`;
+}
+const REINTEGRO=`<p class="pfine">Muchas promos son reintegros: el descuento te lo devuelven después en el resumen o la cuenta. Confirmá las condiciones en tu banco o billetera antes de pagar.</p>`;
 function renderResults(){
   const R=analyze();
   $("verdict").classList.toggle("idle",!R);
@@ -415,26 +440,28 @@ function renderResults(){
   const missTxt=m=>m.length?`<span class="pill warn">Faltan ${m.length}</span>`:"";
   if(R.doSplit){
     const s=R.bestSplit;
+    const promos=promoCard(s.a)+promoCard(s.b)+nearTxt(s.a)+nearTxt(s.b);
     $("verdict").innerHTML=`<span class="tag">Te conviene dividir la compra</span><div class="big num">${money(s.total)}</div>
-      <p>${s.A.length} productos en <b>${cname(s.a.chain)}</b> y ${s.B.length} en <b>${cname(s.b.chain)}</b>. <span class="save">Ahorrás ${money(R.saving)}</span> frente a comprar todo en ${cname(bs.chain)}.</p><a class="btn" href="#comparacion">Ver comparación completa</a>`;
+      <p>${s.A.length} productos en <b>${cname(s.a.chain)}</b> y ${s.B.length} en <b>${cname(s.b.chain)}</b>. <span class="save">Ahorrás ${money(R.saving)}</span> frente a comprar todo en ${cname(bs.chain)}.</p>${promos}${promos?REINTEGRO:""}<a class="btn" href="#comparacion">Ver comparación completa</a>`;
     $("mbarTxt").innerHTML=`${state.cart.length} productos · Dividir: ${cname(s.a.chain)} + ${cname(s.b.chain)} <b>${money(s.total)}</b>`;
   }else{
+    const promos=promoCard(bs)+nearTxt(bs);
     $("verdict").innerHTML=`<span class="tag">Comprá todo en ${cname(bs.chain)}</span><div class="big num">${money(bs.total)}</div>
-      <p>${bs.disc?`Incluye ${money(bs.disc)} de descuento (${ruleTxt(bs.rule)}). `:""}${R.bestSplit&&R.saving>0?`Dividir la compra te ahorraría ${money(R.saving)}, menos que tu mínimo de ${money(state.min)}.`:"Dividir la compra no te ahorra nada."} ${missTxt(bs.missing)}</p><a class="btn" href="#comparacion">Ver comparación completa</a>`;
+      <p>${R.bestSplit&&R.saving>0?`Dividir la compra te ahorraría ${money(R.saving)}, menos que tu mínimo de ${money(state.min)}.`:"Dividir la compra no te ahorra nada."} ${missTxt(bs.missing)}</p>${promos}${promos?REINTEGRO:""}<a class="btn" href="#comparacion">Ver comparación completa</a>`;
     $("mbarTxt").innerHTML=`${state.cart.length} productos · Mejor: ${cname(bs.chain)} <b>${money(bs.total)}</b>`;
   }
   const sorted=[...R.singles].sort((a,b)=>(a.missing.length-b.missing.length)||(a.total-b.total));
   const max=Math.max(...sorted.map(s=>s.sub));
   $("rank").innerHTML=sorted.map((s,i)=>`<div class="rk${i===0?" first":""}"><div class="nm"><span class="dot" style="background:var(--c-${s.chain})"></span><span>${cname(s.chain)}<small style="display:block;font-weight:500;color:var(--muted);font-size:11.5px">${SUC[s.chain]} ${SUC[s.chain]===1?"sucursal":"sucursales"} en CABA</small></span></div>
     <div class="bar" aria-hidden="true"><i style="width:${(s.total/max*100).toFixed(1)}%;background:var(--c-${s.chain})"></i></div>
-    <div class="tot num">${money(s.total)} ${i===0?`<span class="pill">Más barato</span>`:""}${missTxt(s.missing)}<small>${s.disc?`−${money(s.disc)} ${ruleTxt(s.rule)}`:"Sin descuento por medio de pago hoy"}</small></div></div>`).join("");
+    <div class="tot num">${money(s.total)} ${i===0?`<span class="pill">Más barato</span>`:""}${missTxt(s.missing)}<small>${s.disc?`−${money(s.disc)} · ${ruleTxt(s.rule)}${s.rule.hasta?` · hasta el ${s.rule.hasta}`:""}${s.capped?` · <span style="color:var(--warn)">tope alcanzado</span>`:""}`:(s.near?`Te faltan ${money(s.near.falta)} para el ${ruleTxt(s.near.rule)}`:(state.pays.length?"Sin promo para tus medios de pago este día":"Elegí tus medios de pago para ver descuentos"))}</small></div></div>`).join("");
 
   const sp=R.bestSplit;
   if(sp){
     $("splitTitle").textContent=R.doSplit?`Compra dividida recomendada: ahorrás ${money(R.saving)}`:`Compra dividida: ahorrarías ${money(Math.max(0,R.saving))} (por debajo de tu mínimo)`;
     const col=(t,L)=>`<div class="col"><h4><span><span class="dot" style="display:inline-block;background:var(--c-${t.chain});margin-right:6px"></span>${cname(t.chain)}</span><span class="num">${money(t.total)}</span></h4>
       <ul>${L.map(l=>{const b=pick(l,t.chain);return `<li>${qtyTxt(l)} ${esc(PBY[l.pid].name)} <span style="color:var(--muted)">${b.v.brand==="A granel"?"":esc(b.v.brand)}</span></li>`}).join("")}</ul>
-      ${t.disc?`<p class="note" style="margin-top:6px">−${money(t.disc)} ${ruleTxt(t.rule)}</p>`:""}</div>`;
+      ${t.disc?`<p class="note" style="margin-top:8px">−${money(t.disc)} · ${ruleTxt(t.rule)}</p><div class="ptags" style="margin-top:6px">${promoTags(t.rule,t.capped)}</div>`:""}</div>`;
     $("split").innerHTML=col(sp.a,sp.A)+col(sp.b,sp.B);
   }else{$("splitTitle").textContent="Compra dividida";$("split").innerHTML=`<p class="note">Con esta lista no hay una combinación de dos súper que sirva.</p>`}
 
@@ -452,9 +479,10 @@ function renderResults(){
   $("tbl").innerHTML=head+"<tbody>"+body+"</tbody>"+foot;
 }
 function renderBank(){
-  $("bankTbl").innerHTML=`<thead><tr><th>Súper</th><th>Medio de pago</th><th>Descuento</th><th>Días</th><th>Tope</th></tr></thead><tbody>${BANK.map(r=>{
+  $("bankTbl").innerHTML=BANK.length?`<thead><tr><th>Súper</th><th>Medio de pago</th><th>Descuento</th><th>Días</th><th>Tope</th><th>Compra mínima</th><th>Vigencia y condiciones</th><th>Fuente</th></tr></thead><tbody>${BANK.map(r=>{
     const act=state.pays.includes(r.m)&&r.d.includes(state.day);
-    return `<tr><td>${cname(r.c)} ${act?`<span class="pill">Aplica</span>`:""}</td><td style="text-align:left">${PAYS.find(x=>x[0]===r.m)[1]}</td><td class="num">${r.p}%</td><td>${r.d.length===7?"Todos":r.d.map(d=>DAYS[d].slice(0,3)).join(", ")}</td><td class="num">${r.tope?money(r.tope):"Sin tope"}</td></tr>`}).join("")}</tbody>`;
+    return `<tr><td>${cname(r.c)} ${act?`<span class="pill">Aplica</span>`:""}</td><td style="text-align:left">${esc(r.m)}</td><td class="num">${r.p}%</td><td style="text-align:left">${r.d.length===7?"Todos":r.d.map(d=>DAYS[d].slice(0,3)).join(", ")}</td><td class="num">${r.tope?money(r.tope):"Sin tope"}</td><td class="num">${r.min?money(r.min):"—"}</td><td style="text-align:left">${[r.hasta?"Hasta el "+r.hasta:"",esc(r.cond||"")].filter(Boolean).join(" · ")||"—"}</td><td>${r.fuente?`<a href="${esc(r.fuente)}" target="_blank" rel="noopener">Ver</a>`:"—"}</td></tr>`}).join("")}</tbody>`
+    :`<tbody><tr><td style="text-align:left">Todavía no hay promos bancarias cargadas.</td></tr></tbody>`;
 }
 function renderAll(){renderAisles();renderShelf();renderCart();renderResults();renderBank()}
 function refreshCart(){save();renderShelf();renderCart();renderResults();renderBank()}
