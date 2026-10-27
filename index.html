@@ -149,8 +149,18 @@ header.top{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-
 
 .payhead{display:flex;justify-content:space-between;align-items:baseline;gap:6px 12px;flex-wrap:wrap;margin-bottom:8px}
 .paybtns{display:flex;gap:12px}
-.paygroup+.paygroup{margin-top:10px}
-.paygt{font-size:11.5px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.paygroup{border:1px solid var(--line);border-radius:var(--r-sm);background:var(--surface)}
+.paygroup+.paygroup{margin-top:8px}
+.paytog{width:100%;display:flex;align-items:center;justify-content:space-between;gap:10px;background:none;border:0;padding:10px 12px;cursor:pointer;text-align:left;min-height:48px}
+.paytog:hover{background:var(--soft);border-radius:var(--r-sm)}
+.paytog-t{display:flex;flex-direction:column;gap:2px;min-width:0}
+.paygt{font-size:11.5px;font-weight:700;color:var(--ink);text-transform:uppercase;letter-spacing:.06em}
+.paysum{font-size:12.5px;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.paysum.on{color:var(--navy);font-weight:600}
+.chev{flex:0 0 auto;color:var(--navy)}
+.paygroup.open .chev{transform:rotate(180deg)}
+.paygroup .chips{padding:2px 12px 12px}
+@media (prefers-reduced-motion:no-preference){.chev{transition:transform .2s}}
 .lblrow{display:flex;align-items:center;gap:6px}
 .lblrow .lbl{margin-bottom:0}
 .field .lblrow{margin-bottom:8px}
@@ -407,6 +417,7 @@ const MB=D.modo_bancos||[]; // bancos cuyas tarjetas sirven para las promos de M
 const ANY_WALLET="Billetera virtual (cualquiera)";
 const WALLETS=["MODO","Mercado Pago","Cuenta DNI","Naranja X","Personal Pay","Yoy","Ualá","BNA+"];
 const STORE_CARDS=["CencoPay","Tarjeta Carrefour","Cuenta Digital Carrefour","MasClub","Tarjeta Coto","Comunidad Coto","Mi Carrefour"];
+const openPay=new Set(); // grupos de medios de pago abiertos
 const payGroup=m=>WALLETS.includes(m)?"wallet":STORE_CARDS.includes(m)?"store":"bank";
 const PAYS=[...new Set([...BANK.map(r=>r.m),...(BANK.some(r=>r.m==="MODO")?MB:[]),...(BANK.some(r=>r.m===ANY_WALLET)?["Mercado Pago","MODO"]:[])])]
   .filter(m=>m!==ANY_WALLET).sort((a,b)=>a.localeCompare(b,"es")).map(m=>[m,m]);
@@ -547,7 +558,12 @@ function renderCart(){
   document.querySelector(".cart-head h2").innerHTML=`Tu changuito <span style="font-family:var(--body);font-size:13px;font-weight:500;color:var(--muted)">${units} ${units===1?"unidad":"unidades"}</span>`;
   const groups=[["bank","Bancos"],["wallet","Billeteras"],["store","Tarjetas y clubes del súper"]];
   $("pays").innerHTML=PAYS.length?groups.map(([g,t])=>{const ms=PAYS.filter(([m])=>payGroup(m)===g);if(!ms.length)return "";
-    return `<div class="paygroup"><div class="paygt">${t}</div><div class="chips">${ms.map(([id,n])=>`<button class="chip" type="button" data-pay="${esc(id)}" aria-pressed="${state.pays.includes(id)}">${esc(n)}</button>`).join("")}</div></div>`}).join("")
+    const sel=ms.filter(([m])=>state.pays.includes(m)).map(([m])=>m), open=openPay.has(g);
+    const resumen=sel.length?`${sel.length} ${sel.length===1?"elegido":"elegidos"}: ${sel.map(esc).join(", ")}`:"Ninguno elegido";
+    return `<div class="paygroup${open?" open":""}"><button class="paytog" type="button" data-pg="${g}" aria-expanded="${open}" aria-controls="pg-${g}">
+      <span class="paytog-t"><span class="paygt">${t}</span><span class="paysum${sel.length?" on":""}">${resumen}</span></span>
+      <svg class="chev" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg></button>
+      <div class="chips" id="pg-${g}"${open?"":" hidden"}>${ms.map(([id,n])=>`<button class="chip" type="button" data-pay="${esc(id)}" aria-pressed="${state.pays.includes(id)}">${esc(n)}</button>`).join("")}</div></div>`}).join("")
     :`<span class="hint" style="margin:0">Todavía no hay promos bancarias cargadas.</span>`;
 }
 function ruleTxt(r,via){
@@ -726,6 +742,7 @@ document.addEventListener("click",e=>{
   else if(t.id==="copyList"){const txt=waText();
     const fallback=()=>{const ta=document.createElement("textarea");ta.value=txt;document.body.appendChild(ta);ta.select();try{document.execCommand("copy");toast("Lista copiada")}catch(err){toast("No pudimos copiar la lista")}ta.remove()};
     try{navigator.clipboard.writeText(txt).then(()=>toast("Lista copiada"),fallback)}catch(err){fallback()}}
+  else if(t.dataset.pg){const g=t.dataset.pg;openPay.has(g)?openPay.delete(g):openPay.add(g);renderCart()}
   else if(t.id==="payAll"){state.pays=PAYS.map(p=>p[0]);refreshCart()}
   else if(t.id==="payNone"){state.pays=[];refreshCart()}
   else if(t.id==="clear"){state.cart=[];refreshCart()}
