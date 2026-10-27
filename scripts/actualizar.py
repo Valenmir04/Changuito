@@ -252,12 +252,103 @@ def construir(agg, sucursales, fecha):
     return {"fecha": fecha, "region": "CABA", "cadenas": ORDEN, "sucursales": sucursales,
             "pasillos": pas, "frecuentes": frecuentes, "items": items}
 
+# ---------------------------------------------------------------- promos bancarias
+# Se cargan en una planilla (Google Sheets publicada como CSV) con estas columnas:
+# Supermercado | Medio de pago | Descuento % | Tope $ | Compra mínima $ | Días | Vigente hasta | Condiciones | Fuente
+SUPER = {"coto": "coto", "dia": "dia", "carrefour": "carrefour", "carrefour market": "carrefour", "jumbo": "jumbo",
+         "disco": "disco", "vea": "vea", "changomas": "changomas", "chango mas": "changomas", "mas": "changomas"}
+DIAS = {"domingo": 0, "lunes": 1, "martes": 2, "miercoles": 3, "jueves": 4, "viernes": 5, "sabado": 6}
+
+def _clave(s):
+    return unicodedata.normalize("NFD", str(s or "")).encode("ascii", "ignore").decode().lower().strip()
+
+def _numero(s):
+    s = re.sub(r"[^\d,.]", "", str(s or ""))
+    if not s:
+        return 0.0
+    if "," in s:  # formato argentino: 15.000,50
+        s = s.replace(".", "").replace(",", ".")
+    elif s.count(".") >= 1 and len(s.split(".")[-1]) == 3:  # 15.000
+        s = s.replace(".", "")
+    return float(s)
+
+def leer_promos():
+    """Lee la planilla de promos. Usa la dirección de scripts/promos_url.txt; si está vacía, scripts/promos.csv."""
+    import csv
+    url_file = os.path.join(RAIZ, "scripts", "promos_url.txt")
+    url = open(url_file, encoding="utf-8").read().strip() if os.path.exists(url_file) else ""
+    url = os.environ.get("PROMOS_URL", "").strip() or url
+    try:
+        if url:
+            with pedir(url) as r:
+                texto = r.read().decode("utf-8-sig")
+            print("Promos leídas de la planilla", file=sys.stderr)
+        else:
+            texto = open(os.path.join(RAIZ, "scripts", "promos.csv"), encoding="utf-8-sig").read()
+            print("Promos leídas de scripts/promos.csv", file=sys.stderr)
+    except Exception as e:
+        print(f"Aviso: no pude leer las promos ({e}). El sitio queda sin promos bancarias.", file=sys.stderr)
+        return []
+    filas = list(csv.reader(io.StringIO(texto)))
+    if not filas:
+        return []
+    cab = [_clave(c) for c in filas[0]]
+    def col(*nombres):
+        for i, c in enumerate(cab):
+            if any(n in c for n in nombres):
+                return i
+        return None
+    i_sup, i_med, i_pct = col("super", "cadena"), col("medio", "pago", "banco"), col("descuento", "%")
+    i_top, i_dia, i_has, i_con = col("tope"), col("dia"), col("vigente", "hasta"), col("condic")
+    i_min, i_fte = col("minim"), col("fuente")
+    if None in (i_sup, i_med, i_pct):
+        print("Aviso: la planilla de promos no tiene las columnas Supermercado, Medio de pago y Descuento %.", file=sys.stderr)
+        return []
+    hoy = dt.date.today()
+    promos = []
+    for n, f in enumerate(filas[1:], start=2):
+        f = f + [""] * (len(cab) - len(f))
+        if not any(x.strip() for x in f):
+            continue
+        sup, med = _clave(f[i_sup]), f[i_med].strip()
+        cadenas = list(dict.fromkeys(SUPER[s] for s in re.split(r"\s*(?:,|/|\by\b)\s*", sup) if s in SUPER)) if sup not in ("todos", "todas") else ORDEN
+        pct = _numero(f[i_pct])
+        if not cadenas or not med or not 0 < pct <= 100:
+            print(f"Aviso: fila {n} de promos ignorada (revisá supermercado, medio de pago y descuento).", file=sys.stderr)
+            continue
+        dias_txt = _clave(f[i_dia]) if i_dia is not None else ""
+        dias = sorted({v for k, v in DIAS.items() if k in dias_txt}) or list(range(7))
+        hasta = None
+        if i_has is not None and f[i_has].strip():
+            m = re.match(r"(\d{1,2})/(\d{1,2})(?:/(\d{2,4}))?", f[i_has].strip())
+            if m:
+                a = int(m.group(3) or hoy.year)
+                a = a + 2000 if a < 100 else a
+                try:
+                    hasta = dt.date(a, int(m.group(2)), int(m.group(1)))
+                except ValueError:
+                    hasta = None
+            if hasta and hasta < hoy:
+                continue  # promo vencida
+        for c in cadenas:
+            promos.append({"c": c, "m": med, "p": pct, "tope": _numero(f[i_top]) if i_top is not None else 0, "d": dias,
+                           "hasta": (hasta.strftime("%d/%m") if hasta.year == hoy.year else hasta.strftime("%d/%m/%Y")) if hasta else "", "cond": f[i_con].strip() if i_con is not None else "",
+                           "min": _numero(f[i_min]) if i_min is not None else 0, "fuente": f[i_fte].strip() if i_fte is not None else ""})
+    print(f"{len(promos)} promos bancarias vigentes", file=sys.stderr)
+    return promos
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--zip", help="zip de SEPA ya descargado")
     ap.add_argument("--carpeta", help="carpeta ya extraída (con subcarpetas cadena-N)")
     ap.add_argument("--salida", default=os.path.join(RAIZ, "data.json"))
+    ap.add_argument("--solo-promos", action="store_true", help="solo actualiza las promos del data.json existente")
     a = ap.parse_args()
+    if a.solo_promos:
+        data = json.load(open(a.salida, encoding="utf-8"))
+        data["promos"] = leer_promos()
+        json.dump(data, open(a.salida, "w", encoding="utf-8"), ensure_ascii=False, separators=(",", ":"))
+        return
     tmp = tempfile.mkdtemp(prefix="sepa-")
     try:
         carpeta = a.carpeta
@@ -269,6 +360,7 @@ def main():
             extraer(z, carpeta)
         agg, suc, fecha = agregar(carpeta)
         data = construir(agg, suc, fecha)
+        data["promos"] = leer_promos()
         with open(a.salida, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, separators=(",", ":"))
         cuenta = {}
