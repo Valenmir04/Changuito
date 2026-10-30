@@ -793,11 +793,15 @@ function analyze(){
 
 // estado
 const today=new Date().getDay();
-const DEFAULT={cart:[{pid:"leche",vid:"any",qty:4},{pid:"yerba",vid:"yerba-1",qty:2},{pid:"fideos",vid:"any",qty:3},{pid:"aceite",vid:"any",qty:1},
-  {pid:"cola",vid:"cola-0",qty:2},{pid:"jabonliq",vid:"any",qty:1},{pid:"papel",vid:"any",qty:2},{pid:"mayo",vid:"any",qty:1},{pid:"sham",vid:"sham-0",qty:1}],
+// Lista de ejemplo: solo se carga si la persona toca "Probar con una lista de ejemplo"
+const EJEMPLO_CART=[{pid:"leche",vid:"any",qty:4},{pid:"yerba",vid:"yerba-1",qty:2},{pid:"fideos",vid:"any",qty:3},{pid:"aceite",vid:"any",qty:1},
+  {pid:"cola",vid:"cola-0",qty:2},{pid:"jabonliq",vid:"any",qty:1},{pid:"papel",vid:"any",qty:2},{pid:"mayo",vid:"any",qty:1},{pid:"sham",vid:"sham-0",qty:1}];
+const DEFAULT={cart:[],
   pays:[],day:today,min:3000,aisle:"frecuentes",q:"",limit:36};
 let state=JSON.parse(JSON.stringify(DEFAULT));
+const esEjemploViejo=c=>JSON.stringify((c||[]).map(l=>[l.pid,l.vid,l.qty]))===JSON.stringify(EJEMPLO_CART.map(l=>[l.pid,l.vid,l.qty]));
 try{const s=JSON.parse(localStorage.getItem("changuito-v3")||"null");if(s&&Array.isArray(s.cart))state={...state,...s,day:today}}catch(e){}
+if(esEjemploViejo(state.cart))state.cart=[];
 state.cart=state.cart.filter(l=>PBY[l.pid]&&(l.vid==="any"||PBY[l.pid].variants.some(v=>v.vid===l.vid)));
 if(!AISLES.some(a=>a[0]===state.aisle))state.aisle="frecuentes";
 state.pays=(state.pays||[]).filter(m=>PAYS.some(p=>p[0]===m));
@@ -852,7 +856,7 @@ function renderCart(){
     return `<li><span class="n">${esc(p.name)} ${esc(p.pres)}<small>${esc(b||"")}</small></span>
       <span class="step sm"><button type="button" data-ld="${i}" aria-label="Uno menos de ${esc(p.name)}">−</button><span class="num">${l.qty}</span><button type="button" data-li="${i}" aria-label="Uno más de ${esc(p.name)}">+</button></span>
       <button class="x" type="button" data-rm="${i}" aria-label="Sacar ${esc(p.name)} del changuito">×</button></li>`}).join("")
-    :`<li class="emptyli">Tu changuito está vacío. Agregá productos desde la góndola.</li>`;
+    :`<li class="emptyli">Tu changuito está vacío. Agregá productos desde la góndola.<br><button class="link" type="button" id="demoCart" style="margin-top:8px">Probar con una lista de ejemplo</button></li>`;
   const units=state.cart.reduce((s,l)=>s+l.qty,0);
   document.querySelector(".cart-head h2").innerHTML=`Tu changuito <span style="font-family:var(--body);font-size:13px;font-weight:500;color:var(--muted)">${units} ${units===1?"unidad":"unidades"}</span>`;
   const groups=[["bank","Bancos"],["wallet","Billeteras"],["store","Tarjetas y clubes del súper"]];
@@ -942,7 +946,10 @@ function renderResults(){
   renderNav();
   const R=analyze();
   $("verdict").classList.toggle("idle",!R);
-  if(!R){$("verdict").innerHTML=`<p>Agregá productos para ver dónde te conviene comprar.</p>`;$("rank").innerHTML="";$("split").innerHTML="";$("tbl").innerHTML="";$("mbarTxt").textContent="Changuito vacío";return}
+  if(!R){$("verdict").innerHTML=`<p>Agregá productos para ver dónde te conviene comprar.</p>`;
+    const vacio=`<p class="note" style="margin:0">Cuando agregues productos a tu changuito, acá vas a ver en qué súper te conviene comprar.</p>`;
+    $("rank").innerHTML=vacio;$("splitTitle").textContent="Compra dividida";$("split").innerHTML="";$("tbl").innerHTML="";$("tblCards").innerHTML="";
+    $("mbarTxt").textContent="Tu changuito está vacío";return}
   const bs=R.bestSingle;
   const missTxt=m=>m.length?`<span class="pill warn">Faltan ${m.length}</span>`:"";
   if(R.doSplit){
@@ -1076,6 +1083,7 @@ document.addEventListener("click",e=>{
   else if(t.id==="payAll"){state.pays=PAYS.map(p=>p[0]);refreshCart()}
   else if(t.id==="payNone"){state.pays=[];refreshCart()}
   else if(t.id==="clear"){state.cart=[];refreshCart()}
+  else if(t.id==="demoCart"){state.cart=JSON.parse(JSON.stringify(EJEMPLO_CART)).filter(l=>PBY[l.pid]);refreshCart();toast("Cargamos una lista de ejemplo. Vaciala cuando quieras.")}
 });
 let qT;$("q").addEventListener("input",e=>{clearTimeout(qT);qT=setTimeout(()=>{state.q=e.target.value;state.limit=36;renderAisles();renderShelf()},150)});
 $("day").addEventListener("change",e=>{state.day=+e.target.value;renderResults();renderBank();renderBankCards()});
