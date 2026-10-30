@@ -37,6 +37,10 @@ Las promos de MODO valen para tarjetas de Galicia, Santander, BBVA, Macro, Naci�
 
 `index.html` incluye arriba una cabecera para que el sitio se adapte al celular y muestre bien las tildes (codificación, ajuste al ancho de la pantalla). Si se reemplaza `index.html` por una versión nueva de la app, hay que volver a agregarla con `python3 scripts/armar_index.py <app.html> index.html`.
 
+## Calculadora de recetas
+
+Desde la barra de arriba ("Calculadora de recetas") se calcula el costo de una receta con los precios del súper: ingredientes y cantidades, cuánto rinde, otros gastos y el porcentaje de ganancia. Las recetas guardadas quedan en el navegador de cada persona. El tamaño de cada paquete sale de SEPA (`tam_paquete` en `scripts/actualizar.py`).
+
 ## Si algo falla
 
 - Si la actualización termina en rojo, abrí el paso que falló, copiá el mensaje de error y pasáselo a Claude.

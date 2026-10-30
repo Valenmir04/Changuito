@@ -112,7 +112,8 @@ def leer(path, **kw):
 
 def agregar(carpeta):
     cols = ["id_bandera", "id_sucursal", "id_producto", "productos_ean", "productos_descripcion",
-            "productos_marca", "productos_precio_lista", "productos_precio_unitario_promo1", "productos_leyenda_promo1"]
+            "productos_marca", "productos_precio_lista", "productos_precio_unitario_promo1", "productos_leyenda_promo1",
+            "productos_cantidad_presentacion", "productos_unidad_medida_presentacion"]
     partes, sucursales, fecha = [], {}, None
     for com in sorted({c for c, _ in CADENAS}):
         dirs = glob.glob(os.path.join(carpeta, f"cadena-{com}"))
@@ -147,7 +148,9 @@ def agregar(carpeta):
 
     moda = lambda s: s.dropna().mode().iloc[0] if s.notna().any() else None
     g = df.groupby(["chain", "ean"]).agg(precio=("precio", moda), sucursales=("id_sucursal", "nunique"),
-                                         desc=("productos_descripcion", "first"), marca=("productos_marca", "first"))
+                                         desc=("productos_descripcion", "first"), marca=("productos_marca", "first"),
+                                         cant=("productos_cantidad_presentacion", "first"),
+                                         unidad=("productos_unidad_medida_presentacion", "first"))
     pr = df.dropna(subset=["productos_leyenda_promo1"]).copy()
     pr["ley"] = pr.productos_leyenda_promo1.str.strip()
     pr = pr[pr.ley != ""]
@@ -182,6 +185,61 @@ def pasillo(texto):
         if rx.search(" " + t + " "):
             return k
     return "otros"
+
+# ---------------------------------------------------------------- tamaño del paquete
+# Se normaliza a gramos (g), mililitros (ml) o unidades (u), para la calculadora de recetas.
+UNIDADES = {"g": ("g", 1), "gr": ("g", 1), "grm": ("g", 1), "grs": ("g", 1), "gramos": ("g", 1),
+            "kg": ("g", 1000), "kgm": ("g", 1000), "kgs": ("g", 1000),
+            "ml": ("ml", 1), "mlt": ("ml", 1), "cc": ("ml", 1), "cmq": ("ml", 1), "cm3": ("ml", 1),
+            "l": ("ml", 1000), "lt": ("ml", 1000), "ltr": ("ml", 1000), "lts": ("ml", 1000), "litro": ("ml", 1000), "litros": ("ml", 1000)}
+
+def _tam(cant, unidad):
+    u = re.sub(r"[^a-z0-9]", "", str(unidad or "").lower())
+    try:
+        c = float(str(cant).replace(",", "."))
+    except ValueError:
+        return None
+    if u in UNIDADES and c > 0:
+        base, f = UNIDADES[u]
+        return (round(c * f, 1), base)
+    return None
+
+_RX_TAM = re.compile(r"(\d+(?:[.,]\d+)?)\s*-?\s*(kgm|kgs|kg|grm|grs|gr|g|mlt|ml|cc|cmq|ltr|lts|lt|l)\b", re.I)
+_RX_UNI = re.compile(r"(?:x\s*|\b)(\d{1,3})\s*(?:un\b|uni\b|unid|u\b)", re.I)
+
+def tam_desde_nombre(texto):
+    t = str(texto or "")
+    m = None
+    for m in _RX_TAM.finditer(t):  # nos quedamos con la última medida (suele ser la del paquete)
+        pass
+    if m:
+        return _tam(m.group(1), m.group(2))
+    mu = _RX_UNI.search(t)
+    if mu and int(mu.group(1)) > 0:
+        return (float(mu.group(1)), "u")
+    return None
+
+def tam_paquete(filas):
+    """Tamaño más repetido entre cadenas (g o ml); si no hay, lo lee del nombre."""
+    votos = {}
+    for f in filas.values():
+        t = _tam(f.cant, f.unidad)
+        if t:
+            votos[t] = votos.get(t, 0) + 1
+    nombre = None
+    for c in PREF_DESC:
+        if c in filas:
+            nombre = tam_desde_nombre(filas[c].desc)
+            if nombre:
+                break
+    votos = {t: v for t, v in votos.items() if t[0] >= 5}  # "1 g" o "1 ml" suele ser un error de carga
+    if votos:
+        top = max(votos.items(), key=lambda kv: (kv[1], kv[0][0]))[0]
+        # si el nombre dice otra cosa muy distinta (ej. 1 kg vs 1 g), le creemos al nombre
+        if nombre and nombre[1] == top[1] and not (0.2 <= top[0] / nombre[0] <= 5):
+            return nombre
+        return top
+    return nombre
 
 CHICAS = {"de", "del", "la", "las", "el", "los", "y", "x", "con", "sin", "en", "p/", "c/", "s/", "para", "a"}
 def lindo(desc):
@@ -236,7 +294,9 @@ def construir(agg, sucursales, fecha):
         ref = next(filas[c] for c in PREF_DESC if c in filas)
         nombre = lindo(ref.desc)
         marca = str(ref.marca).strip() if isinstance(ref.marca, str) else ""
-        items.append([ean, nombre, lindo(marca) if marca else "", pasillo(nombre + " " + marca), p])
+        tam = tam_paquete(filas)
+        items.append([ean, nombre, lindo(marca) if marca else "", pasillo(nombre + " " + marca), p,
+                      [tam[0] if tam[0] % 1 else int(tam[0]), tam[1]] if tam else None])
     items.sort(key=lambda x: (-sum(1 for v in x[4] if v), x[1]))
     idx = {x[0]: x for x in items}
     frecuentes = []
