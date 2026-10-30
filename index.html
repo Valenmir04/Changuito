@@ -213,6 +213,19 @@ body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset
 .cart{top:74px}
 
 /* ---------- Vistas ---------- */
+body{overflow-x:clip}
+@media (prefers-reduced-motion:no-preference){
+  .v-out-l{animation:vOut .19s ease-in forwards;--to:-22px}
+  .v-out-r{animation:vOut .19s ease-in forwards;--to:22px}
+  @keyframes vOut{to{opacity:0;transform:translateX(var(--to))}}
+  .v-in>*{animation:vIn .5s cubic-bezier(.2,.75,.25,1) both}
+  .v-in>*:nth-child(2){animation-delay:.06s}
+  .v-in>*:nth-child(3){animation-delay:.12s}
+  .v-in>*:nth-child(4){animation-delay:.18s}
+  .v-in>*:nth-child(n+5){animation-delay:.24s}
+  @keyframes vIn{from{opacity:0;transform:translate(var(--dx,0),10px)}}
+  .tn-rec,.tn-back,.tn-links,.tn-cart{transition:background-color .25s,color .25s,border-color .25s}
+}
 .tn-back{display:none;align-items:center;gap:6px;text-decoration:none;color:var(--navy);font-weight:700;font-size:14px;padding:8px 12px;border-radius:99px;flex:0 0 auto}
 .tn-back:hover{background:var(--soft)}
 .tn-rec{flex:0 0 auto;display:flex;align-items:center;gap:7px;text-decoration:none;color:var(--bordo);background:var(--bordo-soft);border:1.5px solid rgba(122,31,43,.35);font-weight:700;font-size:14px;padding:7px 13px;border-radius:10px;margin-left:auto}
@@ -1120,13 +1133,26 @@ function rDirty(){const s=rec.id&&savedOf(rec.id);if(s)return sig(s)!==sig(rec);
 
 // ---------- vistas ----------
 let VIEW="inicio";
-function showView(v,push){
-  VIEW=v;$("inicio").hidden=v!=="inicio";$("recetas").hidden=v!=="recetas";
+let vT1,vT2;
+function showView(v,push,instant){
+  const prev=VIEW;VIEW=v;
   document.body.classList.toggle("v-recetas",v==="recetas");
   if(push){try{history.pushState(null,"",v==="recetas"?"#recetas":location.pathname+location.search)}catch(e){}}
-  window.scrollTo({top:0,behavior:"auto"});
-  if(v==="recetas")renderRecAll();
   document.title=v==="recetas"?"Calculadora de recetas · Changuito":"Changuito";
+  const out=$(prev), inn=$(v), toRec=v==="recetas";
+  const reduce=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
+  clearTimeout(vT1);clearTimeout(vT2);
+  ["inicio","recetas"].forEach(id=>$(id).classList.remove("v-out-l","v-out-r","v-in"));
+  const swap=()=>{
+    out.classList.remove("v-out-l","v-out-r");
+    $("inicio").hidden=v!=="inicio";$("recetas").hidden=v!=="recetas";
+    window.scrollTo({top:0,behavior:"instant"});
+    if(toRec)renderRecAll();
+    if(!instant&&!reduce){inn.style.setProperty("--dx",toRec?"28px":"-28px");void inn.offsetWidth;inn.classList.add("v-in");vT2=setTimeout(()=>inn.classList.remove("v-in"),700)}
+  };
+  if(instant||reduce||prev===v){swap();return}
+  out.classList.add(toRec?"v-out-l":"v-out-r");
+  vT1=setTimeout(swap,190);
 }
 window.addEventListener("popstate",()=>showView(location.hash==="#recetas"?"recetas":"inicio",false));
 
@@ -1316,6 +1342,6 @@ rv.addEventListener("click",e=>{
   else if(d.rdelok){const s=savedOf(d.rdelok);recetas=recetas.filter(x=>x.id!==d.rdelok);rStore(RK,recetas);
     if(rec.id===d.rdelok){rec.id=null;rDraft()}rDel=null;renderRecBtns();renderList();toast(`Borraste «${s?s.nombre:"la receta"}»`)}
 });
-showView(location.hash==="#recetas"?"recetas":"inicio",false);
+showView(location.hash==="#recetas"?"recetas":"inicio",false,true);
 })();
 </script>
