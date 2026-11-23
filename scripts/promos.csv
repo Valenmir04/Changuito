@@ -1,59 +1,57 @@
 Supermercado,Medio de pago,Descuento %,Tope $,Compra mínima $,Días,Vigente hasta,Condiciones,Fuente
-Coto,Supervielle,20,,,Todos,30/11/2026,"Crédito Visa o Mastercard o débito Visa, en un pago. Aplican exclusiones",https://www.cuidaelmango.com/promociones/coto/miercoles
-Coto,Credicoop,10,,,Todos,30/11/2026,Con tarjetas Cabal Credicoop,https://www.cuidaelmango.com/promociones/coto/miercoles
-Coto,Banco Ciudad,25,30000,,Lunes,30/11/2026,Con crédito Ciudad o pagando con MODO desde la app Ciudad. Productos sin oferta. Aplican exclusiones,https://www.cuidaelmango.com/promociones/coto/lunes
-Coto,ICBC,20,15000,,Lunes,30/11/2026,"Tope por compra. Visa, Mastercard o Visa débito ICBC. Aplican exclusiones",https://www.cuidaelmango.com/promociones/coto/lunes
-Coto,Banco Columbia,30,,,"Martes, Jueves",30/11/2026,"Martes: pagando con MODO desde la app Columbia, solo sucursales. Jueves: crédito Visa o Mastercard. Aplican exclusiones",https://www.cuidaelmango.com/promociones/coto/martes
-Coto,Comafi,35,,,Martes,30/11/2026,"Pagando con MODO desde la app Comafi, solo sucursales. Con tarjeta Visa: tope $15.000 por compra. Aplican exclusiones",https://www.cuidaelmango.com/promociones/coto/martes
-Coto,Credicoop,30,,,Martes,30/11/2026,Con Cabal o pagando con MODO desde Banca Credicoop. Aplican exclusiones,https://www.cuidaelmango.com/promociones/coto/martes
-Coto,MODO,25,,,Martes,28/02/2027,"Solo sucursales, productos sin oferta. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes",https://www.cuidaelmango.com/promociones/coto/modo
-Coto,Banco Nación,10,7500,,Martes,30/11/2026,"Pagando con BNA+ MODO con Mastercard, solo sucursales. Se suma al 25% de MODO. Tope por mes",https://www.cuidaelmango.com/promociones/coto/martes
-Coto,Supervielle,30,,,Martes,30/11/2026,"Pagando con MODO desde la app Supervielle, solo sucursales. No se suma al 25% de MODO",https://www.cuidaelmango.com/promociones/coto/martes
-Coto,Naranja X,20,3000,,Martes,30/11/2026,"Plan Inicial Naranja X, tope por semana. Hasta 30% (tope $12.000) según tu plan",https://www.cuidaelmango.com/promociones/coto/martes
-Coto,Santander,30,,,Jueves,30/11/2026,Pagando sin contacto con el celular (Visa). Solo en locales,https://www.cuidaelmango.com/promociones/coto/jueves
-Coto,ICBC,20,,,Jueves,30/11/2026,Con débito Visa ICBC. Solo sucursales. Excluye electrodomésticos,https://www.cuidaelmango.com/promociones/coto/jueves
-Coto,Banco Patagonia,20,25000,,Jueves,30/11/2026,Tope por compra. Crédito y débito Visa. Aplican exclusiones,https://www.cuidaelmango.com/promociones/coto/jueves
-Coto,Naranja X,20,,,Jueves,26/11/2026,Con crédito Naranja X. Reintegro en el resumen,https://www.cuidaelmango.com/promociones/coto/jueves
-Coto,Brubank,30,,,Jueves,30/11/2026,Vigencia no informada: confirmala en la app,https://www.cuidaelmango.com/promociones/coto
-Coto,Mercado Pago,25,,,Viernes,30/11/2026,Solo sucursales. Aplican exclusiones,https://www.cuidaelmango.com/promociones/coto/viernes
-Coto,Naranja X,25,8000,,"Viernes, Sábado",26/12/2026,Con crédito Naranja X. Tope por compra. Reintegro en el resumen. Puede ser solo en locales adheridos,https://www.cuidaelmango.com/promociones/coto/viernes
-Coto,Mercado Pago,20,,,"Sábado, Domingo",30/11/2026,Solo sucursales. Aplican exclusiones,https://www.cuidaelmango.com/promociones/coto/sabado
-Día,Banco Columbia,20,10000,,"Lunes, Viernes",31/03/2027,"Crédito Visa o Mastercard, en 1 pago. Tope por compra. Ojo: otra fuente dice que es solo para jubilados que cobran en Columbia",https://www.convi.ar/promos-bancarias/dia
-Día,Cuenta DNI,20,,,Lunes,31/12/2026,Con crédito Visa de Banco Provincia por NFC (celular). Pagando con saldo de la app: 10%,https://calcularsueldo.com.ar/finanzas/16379/supermercados-cuenta-dni-noviembre-2026.html
-Día,Naranja X,20,3000,,Martes,31/12/2026,"Plan Inicial Naranja X, tope por semana. Hasta 30% (tope $12.000) según tu plan",https://calcularsueldo.com.ar/?p=16411
-Día,Credicoop,25,15000,,Miércoles,31/12/2026,Pagando con MODO,https://baratoya.app/descuentos-supermercados/miercoles
-Día,Mercado Pago,10,,,Miércoles,30/11/2026,Pagando con dinero en cuenta. Online y sucursal. Ojo: otra fuente dice 15%,https://calcularsueldo.com.ar/?p=16411
-Día,Personal Pay,15,,20000,Jueves,30/11/2026,Con la prepaga Visa de Personal Pay (QR o NFC). Una compra por jueves. Reintegro,https://www.cuidaelmango.com/promociones/dia
-Día,MODO,20,20000,35000,"Viernes, Sábado",30/11/2026,Online y sucursal. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://calcularsueldo.com.ar/?p=16411
-Día,Banco Nación,10,7500,35000,"Viernes, Sábado",31/12/2026,Pagando con BNA+ MODO. Se suma al 20% de MODO,https://baratoya.app/descuentos-supermercados/viernes
-Carrefour,Tarjeta Carrefour,20,,,Martes,30/11/2026,"Crédito Tarjeta Carrefour. No vale en Maxi. Excluye electro, carnicería y otros rubros",https://carrefourbanco.com.ar/promociones-carrefour/
-Carrefour,Cuenta DNI,10,,20000,Miércoles,30/11/2026,Devolución en el acto. Excluye algunos rubros. Una fuente dice mínimo $15.000,https://www.cuidaelmango.com/promociones/carrefour
-Carrefour,Mercado Pago,15,,20000,Jueves,30/11/2026,Pagando con QR y dinero en cuenta,https://www.cuidaelmango.com/promociones/carrefour/mercado-pago
+Coto,Banco Ciudad,25,30000,,Lunes,30/11/2026,"Crédito Ciudad pagando con MODO desde la app Ciudad. Solo sucursales, productos sin oferta. Aplican exclusiones",https://www.convi.ar/promos-bancarias/coto
+Coto,MODO,25,,,Martes,30/11/2026,"Solo sucursales, productos sin oferta. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes",https://www.cuidaelmango.com/promociones/coto
+Coto,Comafi,35,,,Martes,30/11/2026,"Débito o crédito Visa Comafi pagando con MODO desde la app Comafi. Solo sucursales",https://www.convi.ar/promos-bancarias/coto
+Coto,Supervielle,30,,,Martes,30/11/2026,"Pagando con MODO desde la app Supervielle, solo sucursales. No se suma al 25% de MODO",https://www.convi.ar/promos-bancarias/coto
+Coto,Banco Columbia,30,,,"Martes, Jueves",30/11/2026,"Martes: con MODO desde la app Columbia, solo sucursales. Jueves: crédito Visa o Mastercard",https://www.convi.ar/promos-bancarias/coto
+Coto,Credicoop,30,,,Martes,30/11/2026,Con Cabal o Visa desde Banca Credicoop con MODO. Solo sucursales,https://www.convi.ar/promos-bancarias/coto
+Coto,Naranja X,20,3000,,Martes,30/11/2026,"Plan Inicial (el básico), tope por semana. Hasta 30% (tope $12.000) con los planes pagos",https://www.cuidaelmango.com/promociones/coto
+Coto,Santander,30,,,Jueves,30/11/2026,"Pagando sin contacto (NFC) con Visa débito desde el celular. Solo sucursales, muchas exclusiones",https://www.cuidaelmango.com/promociones/coto
+Coto,Cuenta DNI,30,,,Jueves,30/11/2026,"Pagando sin contacto (NFC) con Visa débito desde el celular. Solo sucursales, muchas exclusiones",https://www.cuidaelmango.com/promociones/coto
+Coto,Brubank,30,,,Jueves,30/11/2026,"Débito Visa Brubank con Apple Pay o Google Pay (no vale QR). Solo sucursales. Excluye carnes, pollo, gaseosas, harina, azúcar, aceite y vinos",https://help.brubank.com/es/articles/13977196-30-de-descuento-los-jueves-en-supermercados-coto
+Coto,Naranja X,30,,,Jueves,26/11/2026,"Débito Naranja X sin contacto (NFC) desde el celular. Solo sucursales, hasta agotar fondos",https://www.cuidaelmango.com/promociones/coto
+Coto,ICBC,20,,,Jueves,30/11/2026,Con débito Visa ICBC. Solo sucursales. Aplican exclusiones,https://www.convi.ar/promos-bancarias/coto
+Coto,Mercado Pago,25,,,Viernes,30/11/2026,"Solo sucursales, con cualquier medio de la app. Aplican exclusiones",https://www.convi.ar/promos-bancarias/viernes
+Coto,Naranja X,25,30000,,"Viernes, Sábado, Domingo",29/11/2026,"Solo del 27 al 29/11, con crédito Naranja X (Plan Z). Reintegro en el resumen. Locales adheridos",https://www.cuidaelmango.com/promociones/coto
+Coto,Naranja X,25,8000,,"Viernes, Sábado",26/12/2026,Con crédito Naranja X. Tope por compra. Reintegro en el resumen. Locales adheridos,https://www.cuidaelmango.com/promociones/coto
+Coto,Mercado Pago,20,,,"Sábado, Domingo",30/11/2026,Solo sucursales. Aplican exclusiones,https://www.convi.ar/promos-bancarias/coto
+Día,Cuenta DNI,20,,,Lunes,31/12/2026,Con crédito Visa de Banco Provincia por NFC (celular). Pagando con saldo de la app: 10%,https://www.cuidaelmango.com/promociones/dia
+Día,Banco Columbia,20,10000,,"Lunes, Viernes",31/03/2027,"Crédito Visa o Mastercard en un pago, solo sucursales. Ojo: otra fuente dice que es solo para quienes cobran en Columbia",https://www.cuidaelmango.com/promociones/dia
+Día,Banco del Sol,25,10000,,Martes,30/11/2026,"Con débito Visa Banco del Sol, registrándote en la app. Tope por mes",https://www.cuidaelmango.com/promociones/dia
+Día,Naranja X,20,3000,,Martes,30/11/2026,"Plan Inicial (el básico), tope por semana. Hasta 30% (tope $12.000) con los planes pagos",https://www.cuidaelmango.com/promociones/dia
+Día,Mercado Pago,10,,,Miércoles,30/11/2026,Pagando con dinero en cuenta. Online y sucursal,https://calcularsueldo.com.ar/finanzas/16411/promos-dia-noviembre-2026.html
+Día,Personal Pay,15,,20000,Jueves,30/11/2026,Con la prepaga Visa de Personal Pay (QR o NFC). Una compra por jueves,https://www.cuidaelmango.com/promociones/dia
+Día,MODO,20,20000,35000,"Viernes, Sábado",30/11/2026,Online y sucursal. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://www.convi.ar/promos-bancarias/viernes
+Día,Banco Nación,10,7500,35000,"Viernes, Sábado",31/12/2026,Pagando con BNA+ MODO. Se suma al 20% de MODO,https://calcularsueldo.com.ar/finanzas/16411/promos-dia-noviembre-2026.html
+Carrefour,Tarjeta Carrefour,20,,,Martes,30/11/2026,"Crédito Tarjeta Carrefour, no vale en Maxi. Excluye electro, carnicería, huevos y otros rubros",https://carrefourbanco.com.ar/promociones-carrefour/
+Carrefour,Cuenta DNI,10,,20000,Miércoles,30/11/2026,Solo sucursales. Otra fuente dice que no tiene mínimo. Excluye algunos rubros,https://www.convi.com.ar/promos-bancarias/carrefour
+Carrefour,Mercado Pago,15,,20000,Jueves,30/11/2026,Solo sucursales. Excluye algunos rubros,https://www.convi.com.ar/promos-bancarias/carrefour
 Carrefour,Cuenta Digital Carrefour,15,,,Viernes,30/11/2026,No vale en Maxi. Excluye algunos rubros,https://carrefourbanco.com.ar/promociones-carrefour/
-Carrefour,Naranja X,15,,,Viernes,25/12/2026,Con crédito Naranja X. Reintegro en el resumen,https://www.cuidaelmango.com/promociones/carrefour
+Carrefour,Mercado Pago,10,,,Viernes,30/11/2026,Solo sucursales. Excluye algunos rubros,https://www.convi.ar/promos-bancarias/viernes
 Carrefour,Cuenta Digital Carrefour,10,,,"Sábado, Domingo",30/11/2026,Excluye algunos rubros,https://carrefourbanco.com.ar/promociones-carrefour/
-"Jumbo, Disco y Vea",CencoPay,25,15000,,Lunes,30/11/2026,Solo sucursales. Tope por mes. Excluye electrodomésticos,https://www.convi.ar/promos-bancarias/disco
-"Jumbo, Disco y Vea",Banco Hipotecario,25,20000,,Martes,30/11/2026,Pagando con MODO con débito Visa BH. Solo sucursales. Tope por mes,https://www.cuidaelmango.com/promociones/jumbo/martes
-"Jumbo, Disco y Vea",Naranja X,20,3000,,Martes,30/11/2026,"Plan Inicial Naranja X, tope por semana. Hasta 30% (tope $12.000) según tu plan",https://www.convi.ar/promos-bancarias/disco
-Jumbo,MODO,20,25000,100000,"Martes, Jueves",30/11/2026,Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://calcularsueldo.com.ar/?p=16394
-Jumbo,Credicoop,20,6000,,Viernes,30/11/2026,Con Cabal. Pagando con MODO desde la app Credicoop suma 10% (tope $3.000),https://www.cuidaelmango.com/promociones/jumbo/jueves
-"Jumbo, Disco y Vea",CencoPay,40,15000,,"Viernes, Sábado",30/11/2026,Solo sucursales. Tope por día. No vale en Vea Express ni Disco Express. Excluye electrodomésticos,https://www.cuidaelmango.com/promociones/vea
-Jumbo y Disco,Banco Patagonia,30,40000,,Sábado,30/11/2026,Solo sucursales. Tope por compra,https://www.convi.ar/promos-bancarias/disco
-Disco,MODO,20,25000,100000,"Viernes, Sábado",30/11/2026,Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://calcularsueldo.com.ar/?p=16394
-Vea,Mercado Pago,20,,,Lunes,30/11/2026,Revisá las condiciones en la app,https://calcularsueldo.com.ar/finanzas/16359/supermercados-mercado-pago-la-guia-completa-de-descuentos-y-cuotas-por-dia.html
-Vea,MODO,20,25000,100000,Viernes,30/11/2026,No disponible en Pilar. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://calcularsueldo.com.ar/?p=16394
-ChangoMás,MODO,20,25000,75000,Lunes,30/11/2026,No aplica a transferencias. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://calcularsueldo.com.ar/?p=16394
-ChangoMás,Banco Nación,10,7500,75000,Lunes,31/12/2026,Pagando con BNA+ MODO. Se suma al 20% de MODO,https://baratoya.app/descuentos-supermercados/lunes
-ChangoMás,Banco Columbia,20,10000,,"Martes, Sábado",31/03/2027,Ojo: podría ser solo para jubilados que cobran en Columbia. Confirmalo en la app,https://baratoya.app/descuentos-supermercados/martes
-ChangoMás,Banco Hipotecario,25,10000,,Martes,30/11/2026,Pagando con MODO,https://baratoya.app/descuentos-supermercados/martes
-ChangoMás,Mercado Pago,15,,,Martes,30/11/2026,Excluye algunos rubros,https://calcularsueldo.com.ar/finanzas/16359/supermercados-mercado-pago-la-guia-completa-de-descuentos-y-cuotas-por-dia.html
-ChangoMás,Comafi,20,12000,,Martes,30/11/2026,Crédito Visa/Mastercard o débito Visa. Tope por semana ($15.000 Único Black),https://www.cuidaelmango.com/promociones/changomas
-ChangoMás,MasClub,20,,,"Miércoles, Jueves",30/11/2026,Solo socios MásClub. No acumulable. Vigencia no informada,https://www.cuidaelmango.com/promociones/changomas
-ChangoMás,Credicoop,30,9000,,Jueves,31/12/2026,Pagando con MODO,https://baratoya.app/descuentos-supermercados/jueves
-ChangoMás,Cuenta DNI,20,,,Jueves,31/12/2026,Solo sucursales. Devolución en el acto,https://calcularsueldo.com.ar/finanzas/16379/supermercados-cuenta-dni-noviembre-2026.html
-ChangoMás,Banco Ciudad,35,20000,,Jueves,31/12/2026,Con la app Buepp. Solo sucursales,https://baratoya.app/descuentos-supermercados/jueves
-ChangoMás,ICBC,20,10000,,Jueves,31/12/2026,Pagando con MODO. Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/jueves
-ChangoMás,Yoy,20,10000,,Jueves,31/12/2026,Excluye algunos rubros,https://baratoya.app/descuentos-supermercados/jueves
-ChangoMás,Billetera virtual (cualquiera),15,,,"Viernes, Sábado, Domingo",30/11/2026,Pagando con QR. No acumulable. Aplican exclusiones. Vigencia no informada,https://www.cuidaelmango.com/promociones/changomas
-ChangoMás,Banco Patagonia,20,10000,,Sábado,31/12/2026,Hasta 30% según la tarjeta,https://baratoya.app/descuentos-supermercados/sabado
-ChangoMás,BBVA,20,20000,30000,Domingo,30/11/2026,"Pagando con MODO desde la app BBVA, en un pago. Tope por mes. Vigencia no informada",https://www.cuidaelmango.com/promociones/changomas
+"Jumbo, Disco y Vea",CencoPay,25,15000,,Lunes,30/11/2026,Con crédito CencoPay Cuenta. Solo sucursales. Tope por mes,https://www.convi.com.ar/promos-bancarias/jumbo
+"Jumbo, Disco y Vea",Banco Hipotecario,25,15000,,Martes,30/11/2026,"Débito Visa BH por QR desde la app BH o MODO. Solo sucursales. Tope por mes (otra fuente dice $20.000)",https://www.convi.com.ar/promos-bancarias/jumbo
+"Jumbo, Disco y Vea",Naranja X,20,3000,,Martes,30/11/2026,"Plan Inicial (el básico), tope por semana. Hasta 30% (tope $12.000) con los planes pagos",https://www.convi.com.ar/promos-bancarias/jumbo
+"Jumbo, Disco y Vea",CencoPay,20,,,Miércoles,30/11/2026,Con tarjeta de crédito CencoPay. Ojo: otra fuente dice que es solo online y con exclusiones,https://www.convi.com.ar/promos-bancarias/jumbo
+Jumbo,MODO,20,25000,100000,"Martes, Jueves",30/11/2026,Online y sucursal. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://www.convi.com.ar/promos-bancarias/jumbo
+Jumbo,Naranja X,25,30000,,"Miércoles, Jueves, Viernes, Sábado, Domingo",29/11/2026,"Solo del 25 al 29/11, con crédito Naranja X (Plan Z). Reintegro en el resumen. Locales adheridos",https://www.cuidaelmango.com/promociones/jumbo
+Jumbo,Credicoop,20,6000,,Viernes,30/11/2026,Con Cabal Credicoop. Pagando con MODO desde Banca Credicoop suma 10% más (tope $3.000),https://www.cuidaelmango.com/promociones/jumbo
+Disco,MODO,20,25000,100000,"Viernes, Sábado",30/11/2026,Online y sucursal. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://www.convi.ar/promos-bancarias/disco
+Vea,MODO,20,25000,100000,Viernes,30/11/2026,Online y sucursal. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://www.convi.ar/promos-bancarias/viernes
+ChangoMás,MODO,20,25000,75000,Lunes,30/11/2026,Online y sucursal. No vale pagando por transferencia. Pagás con QR desde MODO o la app de tu banco. Tope por banco y por mes,https://calcularsueldo.com.ar/finanzas/16394/supermercados-banco-nacion-renueva-descuentos-en-tus-compras-de-noviembre-2026.html
+ChangoMás,Banco Hipotecario,25,10000,,Martes,30/11/2026,"Débito Visa BH por QR desde la app BH o MODO. Tope por mes; hasta $30.000 con paquete (Búho One, Sueldo, Jubilado)",https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Banco Columbia,20,10000,,"Martes, Sábado",30/11/2026,Crédito Visa o Mastercard. Tope por semana,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Comafi,20,12000,,Martes,30/11/2026,Crédito Visa/Mastercard o débito Visa. Tope por semana ($15.000 con Único Black),https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Naranja X,20,3000,,Martes,30/11/2026,"Plan Inicial (el básico), tope por semana. Hasta 30% (tope $12.000) con los planes pagos",https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,MasClub,15,,,"Miércoles, Jueves",30/11/2026,Socios MásClub (el club es gratis). Sucursal y online. No acumulable,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Banco Ciudad,35,20000,,Jueves,30/11/2026,Con la app Buepp. Solo sucursales. Confirmá el tope en la app,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Credicoop,30,9000,,Jueves,30/11/2026,Con Cabal Credicoop pagando con MODO. Tope por semana,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,ICBC,20,10000,,Jueves,30/11/2026,Por QR desde la app ICBC o MODO. Tope por semana. 30% si cobrás el sueldo en ICBC,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Yoy,20,10000,,Jueves,30/11/2026,Crédito o débito Mastercard Yoy. Tope por semana,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Cuenta DNI,20,,,Jueves,30/11/2026,Desde la app por NFC o con saldo en cuenta. Sin mínimo,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Billetera virtual (cualquiera),20,,,Viernes,27/11/2026,Solo el viernes 27/11. Pagando con QR. No acumulable,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Credicoop,30,13500,,Sábado,28/11/2026,Solo el sábado 28/11. Con Cabal Credicoop pagando con MODO,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Banco Patagonia,20,10000,,Sábado,30/11/2026,Crédito Visa o Mastercard Plus. Tope por mes. Hasta 30% con paquete Singular,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,ICBC,20,15000,,"Sábado, Domingo",30/11/2026,"Solo el último fin de semana del mes (28 y 29/11), crédito Visa o Mastercard en un pago",https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,Yoy,20,15000,,"Sábado, Domingo",29/11/2026,Solo el 28 y 29/11. Con crédito Mastercard Yoy,https://www.cuidaelmango.com/promociones/changomas
+ChangoMás,BBVA,20,20000,30000,Domingo,30/11/2026,Pagando por QR con MODO desde la app BBVA. Tope por mes,https://www.cuidaelmango.com/promociones/changomas
